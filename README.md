@@ -1,12 +1,18 @@
-# Ring-client-web
+# Ring-webextension
 
-Web client using [Ring API](https://github.com/sevaivanov/ring-api).
+It's using the [Ring API](https://github.com/sevaivanov/ring-api).
+
+> WebExtensions are a new way to write browser extensions. The technology is designed for cross-browser compatibility: to a large extent the API is compatible with the extension API supported by Google Chrome and Opera. Extensions written for these browsers will in most cases run in Firefox with just a few changes. The API is also fully compatible with multiprocess Firefox. -- [Mozilla](https://developer.mozilla.org/en-US/Add-ons/WebExtensions)
 
 ## Roadmap
 
-* Implement basic socket communication
-* Design an interface
+* Write a skeleton
+* Define the Ring API Socket.IO communication library
+* Write the chronological list of features to implement
+* Design a responsive user interface
 * Implement an interface
+* Adapt it for all browsers
+* Define tests
 
 ## Architecture
 

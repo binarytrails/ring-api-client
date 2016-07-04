@@ -6,25 +6,16 @@ It's using the [Ring API](https://github.com/sevaivanov/ring-api).
 
 ## Roadmap
 
-* Write a skeleton
-* Define the Ring API Socket.IO communication library
-* Write the chronological list of features to implement
-* Design a responsive user interface
-* Implement an interface
+* ~~Write a skeleton~~
+* ~~Design a responsive user interface~~
+* Implement the interface
 * Adapt it for all browsers
-* Define tests
-
-## Architecture
-
-### WebSockets vs Socket.IO
-
-[Socket.IO](https://github.com/socketio/engine.io) contains WebSocket and adds the [fallback transports](https://github.com/socketio/engine.io/tree/master/lib/transports). The user can define them by passing *transports* option to the server constructor:
-
-    transports (<Array> String): transports to allow connections to (['polling', 'websocket'])
-
-The advantage of using the WebSockets is that they are directly integrated to HTML5. The counter part is that [they are not supported by everyone](http://caniuse.com/#feat=websockets).
-
-To ensure flexibility and support for a wider range of software, it would be better to use Socket.IO that contains the WebSocket implementation.
+* Write tests
+* Implement features
+    * Search contacts
+    * Chat windows
+    * Settings
+    * Video
 
 ## License
 

@@ -1,4 +1,4 @@
-# Ring-webextension
+# Ring-webext
 
 It's using the [Ring API](https://github.com/sevaivanov/ring-api).
 

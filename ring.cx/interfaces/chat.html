@@ -11,11 +11,17 @@
 
         <script src="js/chat.js" async></script>
     </head>
-    <body>
+    <body onload="moqChatData();">
         <div id="container">
             <div id="header"></div>
             <div id="left">
-                <div id="chatHistory" class="windowLightStyle"></div>
+                <div id="chatHistory" class="windowLightStyle">
+                    <!-- chatHistoryItems are filled dynamically -->
+                    <div class="chatHistoryItem">
+                        <div class="chatHistoryItemImage"></div>
+                        <div class="chatHistoryItemText"></div>
+                    </div>
+                </div>
                 <input id="chatInput" class="windowLightStyle"
                     placeholder="Reply..."></input>
             </div>

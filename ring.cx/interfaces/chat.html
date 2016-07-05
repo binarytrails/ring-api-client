@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="Ring.cx WebExtension">
+        <meta name="keywords" content="Ring.cx Web Light Client WebExtension">
+		<meta name="author" content="Seva Ivanov">
+
+        <link rel="stylesheet" href="css/chat.css"/>
+        <link rel="stylesheet" href="../res/font-awesome/css/font-awesome.min.css">
+
+        <script src="js/chat.js" async></script>
+    </head>
+    <body>
+        <div id="container">
+            <div id="header"></div>
+            <div id="left">
+                <div id="chatHistory" class="windowLightStyle"></div>
+                <input id="chatInput" class="windowLightStyle"
+                    placeholder="Reply..."></input>
+            </div>
+            <div id="right">
+                <input id="searchContacts" class="windowLightStyle"
+                    placeholder="Search contacts..."></input>
+                <div id="contactsList" class="windowLightStyle"></div>
+            </div>
+        </div>
+    </body>
+</html>

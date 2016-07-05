@@ -15,15 +15,12 @@
         }
     },
 
-    "permissions": [
-        "activeTab"
-    ],
+    "background": {
+        "scripts": ["scripts/background.js"]
+    },
 
     "browser_action": {
         "default_icon": "res/icons/ring.svg",
-        "default_title": "Ring.cx",
-        "default_popup": "popup/contacts.html"
-    },
-
-    "web_accessible_resources": []
+        "default_title": "Ring.cx"
+    }
 }

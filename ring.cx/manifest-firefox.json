@@ -5,7 +5,7 @@
     "manifest_version": 2,
     "homepage_url": "https://github.com/sevaivanov/ring-webextension",
     "icons": {
-        "48": "resources/icons/ring.svg"
+        "48": "resources/icons/ring.png"
     },
 
     "applications": {
@@ -20,7 +20,7 @@
     },
 
     "browser_action": {
-        "default_icon": "resources/icons/ring.svg",
+        "default_icon": "resources/icons/ring.png",
         "default_title": "Ring.cx"
     }
 }

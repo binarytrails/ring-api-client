@@ -19,8 +19,6 @@ function moqChatHistory()
     }
 }
 
-function moqChatData()
-{
-    moqChatHistory();
-}
+// it will be onload if the <script> has an async tag
+moqChatHistory();
 

@@ -51,25 +51,57 @@ html, body
 
                 .chatHistoryItem
                 {
-                    height: 4em;
+                    height: auto;
                     width: 98%;
                     margin: 1%;
-                    background: #d7f5f0;
-                    border-radius: 40px 40px 40px 40px;
-                    -moz-border-radius: 40px 40px 40px 40px;
-                    -webkit-border-radius: 40px 40px 40px 40px;
-                    border: 0.5px solid #d4d4d4;
+                    overflow: hidden;
                 }
+
+                    /* All children */
+                    .chatHistoryItem > *
+                    {
+                        display: inline-block;
+                        vertical-align: middle;
+                    }
 
                     .chatHistoryItemImage
                     {
-                        width: 5%;
+                        position: relative;
+                        width: 4em;
+                        height: 4em;
+                        border-radius: 50%;
+                        -moz-border-radius: 50%;
+                        -webkit-border-radius: 50%;
+                        /*background: #d7f5f0;*/
                     }
+
+                        /* Placeholder FontAwesome icon */
+                        .chatHistoryItemImage > i
+                        {
+                            width: 100%;
+                            height: 100%;
+                            display: inline-block;
+                            text-align: center;
+                            vertical-align: middle;
+                            opacity: 0.8;
+                        }
 
                     .chatHistoryItemText
                     {
-                        width: 90%;
+                        width: 80%;
+                        height 98%;
+                        margin: 1%;
+                        border-radius: 10px 10px 10px 10px;
+                        -moz-border-radius: 10px 10px 10px 10px;
+                        -webkit-border-radius: 10px 10px 10px 10px;
+                        background: #d7f5f0;
+                        /*border: 0.5px solid #d4d4d4;*/
                     }
+
+                        .chatHistoryItemText > p
+                        {
+                            margin: 2%;
+                        }
 
             input#chatInput
             {

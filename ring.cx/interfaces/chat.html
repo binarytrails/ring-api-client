@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="description" content="Ring.cx WebExtension">
         <meta name="keywords" content="Ring.cx Web Light Client WebExtension">
-		<meta name="author" content="Seva Ivanov">
+        <meta name="author" content="Seva Ivanov">
 
         <link rel="stylesheet" href="css/chat.css"/>
         <link rel="stylesheet" href="../resources/font-awesome/css/font-awesome.min.css">
@@ -17,10 +17,16 @@
             <div id="left">
                 <div id="chatHistory" class="windowLightStyle">
                     <!-- chatHistoryItems are filled dynamically -->
+                    <!-- Example: -->
                     <div class="chatHistoryItem">
-                        <div class="chatHistoryItemImage"></div>
-                        <div class="chatHistoryItemText"></div>
+                        <div class="chatHistoryItemImage" style="float:left">
+                            <i class="fa fa-user fa-3x" aria-hidden="true"></i>
+                        </div>
+                        <div class="chatHistoryItemText" style="float:left">
+                            <p>bla bla bla bla</p>
+                        </div>
                     </div>
+                    <!-- /Example -->
                 </div>
                 <input id="chatInput" class="windowLightStyle"
                     placeholder="Reply..."></input>

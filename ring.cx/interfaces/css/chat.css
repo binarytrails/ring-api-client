@@ -170,10 +170,7 @@ html, body
 
                     .contactsItemText
                     {
-                        width: auto;
-                        height 1em;
-                        margin: 1%;
-                        margin-top: 1em; /* FIXME: vertical-align hack */
+                        padding: 0 2%;
                         overflow: hidden;
                         border-radius: 10px 10px 10px 10px;
                         -moz-border-radius: 10px 10px 10px 10px;
@@ -183,7 +180,6 @@ html, body
 
                         .contactsItemText > p
                         {
-                            margin: 5%;
                         }
 
                     .contactsItemOptions
@@ -191,6 +187,7 @@ html, body
                         width: 5%;
                         height: auto;
                         float: right;
+                        padding: 0.3%;
                         margin-top: 0.8em; /* FIXME: verical-align hack */
                         border-radius: 10px 10px 10px 10px;
                         -moz-border-radius: 10px 10px 10px 10px;

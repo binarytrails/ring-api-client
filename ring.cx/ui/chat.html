@@ -13,7 +13,7 @@
     </head>
     <body>
         <div id="container">
-            <div id="header"></div>
+            <div id="top"></div>
             <div id="left">
                 <div id="chatHistory" class="windowLightStyle">
                     <!-- chatHistoryItems are filled dynamically -->
@@ -32,8 +32,11 @@
                     placeholder="Reply..."></input>
             </div>
             <div id="right">
-                <input id="searchContacts" class="windowLightStyle"
-                    placeholder="Search contacts..."></input>
+                <div id="searchContacts" class="windowLightStyle">
+                    <input class="searchIcon" type="submit" value="&#xf002;"></input>
+                    <input id="searchContactsText"
+                        placeholder="Search contacts..."></input>
+                </div>
                 <div id="contacts" class="windowLightStyle">
                     <!-- contactsItems are filled dynamically -->
                     <!-- Example: -->

@@ -8,7 +8,8 @@ It's using the [Ring API](https://github.com/sevaivanov/ring-api).
 
 * ~~Write a skeleton~~
 * ~~Design a responsive user interface~~
-* Implement the interface
+* Implement the UI
+* Add UI media queries to ensure responsiveness
 * Adapt it for all browsers
 * Write tests
 * Implement features

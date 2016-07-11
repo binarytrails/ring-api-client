@@ -139,7 +139,7 @@ html, body
                 #searchContacts > input
                 {
                     max-height: 100%;
-                    padding: 0.2% 0;
+                    padding: 0;
                     border: none;
                     background: none;
                 }
@@ -147,13 +147,16 @@ html, body
                 #searchContacts > input.searchIcon
                 {
                     min-height: 1.5em;
-                    width: 2em;
+                    min-width: 10%;
+                    margin: 0 1%;
                     float: left;
                 }
 
                 input#searchContactsText
                 {
+                    width: 86%;
                     margin-top: 0.2em;
+                    margin-right: 2%;
                     float: left;
                 }
 

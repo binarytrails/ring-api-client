@@ -1,0 +1,11 @@
+
+.swal2-container .dynamicHtml
+{
+    text-align: left;
+}
+    
+    .swal2-container .dynamicHtml input
+    {
+        float: right;
+    }
+

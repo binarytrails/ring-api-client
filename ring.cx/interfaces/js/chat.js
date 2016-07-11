@@ -14,18 +14,11 @@ function moqChatHistory()
             chatHistoryItemText = document.createElement("div");
 
         chatHistoryItem.className = "chatHistoryItem";
-
-
-        // Profile Image
         chatHistoryItemImage.className = "chatHistoryItemImage";
-
-        // Placeholder FontAwesome user icon
-        icon = '<i class="fa fa-user fa-3x" aria-hidden="true"></i>'
-        chatHistoryItemImage.innerHTML = icon;
-
-
-        // Text
         chatHistoryItemText.className = "chatHistoryItemText";
+
+        chatHistoryItemImage.innerHTML =
+           '<i class="fa fa-user fa-3x" aria-hidden="true"></i>';
 
         // Conversation
         text = "<p>Bla ";
@@ -35,12 +28,11 @@ function moqChatHistory()
         }
         chatHistoryItemText.innerHTML = (text += "</p>");
 
-        // With an imaginary friend
+        // Alter who talks
         var cssFloat = "right";
         if (i % 2 == 1) cssFloat = "left";
         chatHistoryItemImage.style.cssFloat = cssFloat;
         chatHistoryItemText.style.cssFloat = cssFloat;
-
 
         chatHistoryItem.appendChild(chatHistoryItemImage);
         chatHistoryItem.appendChild(chatHistoryItemText);
@@ -49,6 +41,39 @@ function moqChatHistory()
     }
 }
 
+function moqContacts()
+{
+    contacts = document.getElementById("contacts");
+    for (var i = 0; i < 10; i++)
+    {
+        var contactsItem = document.createElement("div"),
+            contactsItemImage = document.createElement("div"),
+            contactsItemText = document.createElement("div");
+            contactsItemOptions = document.createElement("div");
+
+        contactsItem.className = "contactsItem";
+        contactsItemImage.className = "contactsItemImage";
+        contactsItemText.className = "contactsItemText";
+        contactsItemOptions.className = "contactsItemOptions";
+
+        contactsItemImage.innerHTML =
+           '<i class="fa fa-user fa-3x" aria-hidden="true"></i>';
+
+        contactsItemText.innerHTML = "<p>Contact #" + i + "</p>";
+
+        contactsItemOptions.innerHTML =
+            '<i class="fa fa-ellipsis-v fa-2x" aria-hidden="true"></i>';
+
+        contactsItem.appendChild(contactsItemImage);
+        contactsItem.appendChild(contactsItemText);
+        contactsItem.appendChild(contactsItemOptions);
+
+        contacts.appendChild(contactsItem);
+    }
+}
+
 // Acts like onload if the <script> has an async attribute
+
 moqChatHistory();
+moqContacts();
 

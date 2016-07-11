@@ -169,17 +169,23 @@ html, body
                 overflow-y: auto;
             }
 
-                #contacts #addContact
+                /* All child items */
+                #contacts > *
                 {
-                    width 98%;
-                    height: 3em;
+                    width: 98%;
                     margin: 1%;
-                    text-align: center;
+                    overflow: hidden;
                     border-radius: 2px 2px 2px 2px;
                     -moz-border-radius: 2px 2px 2px 2px;
                     -webkit-border-radius: 2px 2px 2px 2px;
                     background: #d7f5f0;
                     cursor: pointer;
+                }
+
+                #contacts #addContact
+                {
+                    height: 3em;
+                    text-align: center;
                 }
                     #contacts #addContact:hover
                     {
@@ -193,13 +199,6 @@ html, body
 
                 .contactsItem
                 {
-                    width: 98%;
-                    margin: 1%;
-                    overflow: hidden;
-                    border-radius: 2px 2px 2px 2px;
-                    -moz-border-radius: 2px 2px 2px 2px;
-                    -webkit-border-radius: 2px 2px 2px 2px;
-                    background: #d7f5f0;
                 }
                     .contactsItem:hover
                     {

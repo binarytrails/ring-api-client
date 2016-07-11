@@ -6,8 +6,9 @@ function randomInt(min, max)
 
 function moqChatHistory()
 {
-    chatHistory = document.getElementById("chatHistory");
-    for (var i = 0; i < 10; i++)
+    var chatHistory = document.getElementById("chatHistory");
+
+    for (var i = 0; i < 5; i++)
     {
         var chatHistoryItem = document.createElement("div"),
             chatHistoryItemImage = document.createElement("div"),
@@ -43,8 +44,10 @@ function moqChatHistory()
 
 function moqContacts()
 {
-    contacts = document.getElementById("contacts");
-    for (var i = 0; i < 10; i++)
+    var contacts = document.getElementById("contacts"),
+        addContact = document.getElementById("addContact");
+
+    for (var i = 0; i < 5; i++)
     {
         var contactsItem = document.createElement("div"),
             contactsItemImage = document.createElement("div"),
@@ -68,7 +71,7 @@ function moqContacts()
         contactsItem.appendChild(contactsItemText);
         contactsItem.appendChild(contactsItemOptions);
 
-        contacts.appendChild(contactsItem);
+        contacts.insertBefore(contactsItem, addContact);
     }
 }
 

@@ -169,6 +169,28 @@ html, body
                 overflow-y: auto;
             }
 
+                #contacts #addContact
+                {
+                    width 98%;
+                    height: 3em;
+                    margin: 1%;
+                    text-align: center;
+                    border-radius: 2px 2px 2px 2px;
+                    -moz-border-radius: 2px 2px 2px 2px;
+                    -webkit-border-radius: 2px 2px 2px 2px;
+                    background: #d7f5f0;
+                    cursor: pointer;
+                }
+                    #contacts #addContact:hover
+                    {
+                        background: #cbf2eb;
+                    }
+
+                    #contacts #addContact > i
+                    {
+                        line-height: 3em;
+                    }
+
                 .contactsItem
                 {
                     width: 98%;

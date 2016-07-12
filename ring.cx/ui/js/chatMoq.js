@@ -49,28 +49,7 @@ function moqContacts()
 
     for (var i = 0; i < 5; i++)
     {
-        var contactsItem = document.createElement("div"),
-            contactsItemImage = document.createElement("div"),
-            contactsItemText = document.createElement("div");
-            contactsItemOptions = document.createElement("div");
-
-        contactsItem.className = "contactsItem";
-        contactsItemImage.className = "contactsItemImage";
-        contactsItemText.className = "contactsItemText";
-        contactsItemOptions.className = "contactsItemOptions";
-
-        contactsItemImage.innerHTML =
-           '<i class="fa fa-user fa-3x" aria-hidden="true"></i>';
-
-        contactsItemText.innerHTML = "<p>Contact #" + i + "</p>";
-
-        contactsItemOptions.innerHTML =
-            '<i class="fa fa-ellipsis-v fa-2x" aria-hidden="true"></i>';
-
-        contactsItem.appendChild(contactsItemImage);
-        contactsItem.appendChild(contactsItemText);
-        contactsItem.appendChild(contactsItemOptions);
-
+        contactsItem = buildHtmlContactsItem('id-' + i, 'Contact ' + i);
         contacts.insertBefore(contactsItem, addContact);
     }
 }

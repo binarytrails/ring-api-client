@@ -1,4 +1,6 @@
 
+// TODO export sweetAlert and HTML
+
 // Useful elements of the page
 
 var chatHistory = document.getElementById('chatHistory'),
@@ -24,10 +26,59 @@ function showContact(contact)
 
     sweetAlert({
         title: 'Contact',
-        html: html
-    });
+        html: html,
+        confirmButtonText: 'Update',
+        showCancelButton: true,
+        cancelButtonText: 'Delete'
 
-    // TODO update contact data
+    }).then(
+        function() // update
+        {
+            contact.name = document.getElementById('updateContactName').value;
+            contact.lastname = document.getElementById('updateContactLastname').value;
+
+            var ringId = document.getElementById('updateContactRingId').value;
+
+            if (contact.ringId != ringId)
+            {
+                if (document.getElementById(ringId))
+                {
+                    sweetAlert(
+                        'Contact exists',
+                        'Contact with RingId "' + ringId  + '" exists.',
+                        'error'
+                    );
+                    return;
+                }
+                document.getElementById(contact.ringId).id = ringId;
+                ringLocalStorage.deleteAccountContact(accountId, contact.ringId);
+            }
+            document.getElementById(ringId).childNodes[1].innerHTML =
+                '<p>' + contact.name + ' ' + contact.lastname + '</p>';
+
+            contact.ringId = ringId;
+            ringLocalStorage.saveAccountContact(accountId, contact);
+
+            sweetAlert(
+                'Updated',
+                contact.name + ' ' + contact.lastname + ' has been updated.',
+                'success'
+            );
+        },
+        function(dismiss){
+            if (dismiss == 'cancel') // delete
+            {
+                ringLocalStorage.deleteAccountContact(accountId, contact.ringId);
+                document.getElementById(contact.ringId).remove();
+
+                sweetAlert(
+                    'Deleted',
+                    contact.name + ' ' + contact.lastname + ' has been deleted.',
+                    'success'
+                );
+            }
+        }
+    );
 }
 
 // User Events listeners
@@ -45,7 +96,7 @@ function contactsItemClick()
     }
     catch (error)
     {
-        sweetAlert('Error!', error.message, 'error');
+        sweetAlert('Error', error.message, 'error');
     }
     contact['ringId'] = ringId;
     showContact(contact);
@@ -77,15 +128,15 @@ addContact.addEventListener('click', function()
         if (contactsItem)
         {
             sweetAlert(
-                'Contact exists!',
+                'Contact exists',
                 contact.name + ' ' + contact.lastname + ' is not a new contact.',
                 'error'
             );
-            return
+            return;
         }
 
         // Ensure data persistence using Local Storage
-        saveContact(accountId, contact);
+        ringLocalStorage.saveAccountContact(accountId, contact);
 
         // Add new contact to HTML UI
         contactsItem = buildHtmlContactsItem(
@@ -94,7 +145,7 @@ addContact.addEventListener('click', function()
         contacts.insertBefore(contactsItem, addContact);
 
         sweetAlert(
-            'Added!',
+            'Added',
             contact.name + ' ' + contact.lastname + ' has been added.',
             'success'
         )
@@ -103,12 +154,7 @@ addContact.addEventListener('click', function()
 
 function initChatHtml()
 {
-    var data = JSON.parse(localStorage.getItem('ring.cx'));
-
-    if (!data) return
-
-    var account = data[accountId],
-        accountContacts = account['contacts'];
+    var accountContacts = ringLocalStorage.accountContacts(accountId);
 
     if (Object.keys(accountContacts).length)
     {

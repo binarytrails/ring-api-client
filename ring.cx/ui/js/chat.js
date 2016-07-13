@@ -67,47 +67,35 @@ addContact.addEventListener('click', function()
 
     }).then(function()
     {
-        var name = document.getElementById('newContactName').value,
-            lastname = document.getElementById('newContactLastname').value,
-            ringId = document.getElementById('newContactRingId').value;
+        var contact = {};
+        contact['name'] = document.getElementById('newContactName').value;
+        contact['lastname'] = document.getElementById('newContactLastname').value;
+        contact['ringId'] = document.getElementById('newContactRingId').value;
 
         // Validate contact existence
-
-        var contactsItem = document.getElementById(ringId);
+        var contactsItem = document.getElementById(contact.ringId);
         if (contactsItem)
         {
             sweetAlert(
                 'Contact exists!',
-                name + ' ' + lastname + ' is not a new contact.',
+                contact.name + ' ' + contact.lastname + ' is not a new contact.',
                 'error'
             );
             return
         }
 
         // Ensure data persistence using Local Storage
-
-        var data = JSON.parse(localStorage.getItem('ring.cx'));
-            accountContacts = data[accountId]['contacts'];
-
-        accountContacts[ringId] = {
-            'details': {
-                'name': name,
-                'lastname': lastname
-            }
-        };
-        data[accountId]['contacts'] = accountContacts;
-
-        localStorage.setItem('ring.cx', JSON.stringify(data));
+        saveContact(accountId, contact);
 
         // Add new contact to HTML UI
-
-        contactsItem = buildHtmlContactsItem(ringId, name + ' ' + lastname);
+        contactsItem = buildHtmlContactsItem(
+                contact.ringId, contact.name + ' ' + contact.lastname);
         contactsItem.addEventListener('click', contactsItemClick, false);
         contacts.insertBefore(contactsItem, addContact);
 
         sweetAlert(
             'Added!',
-            name + ' ' + lastname + ' has been added.',
+            contact.name + ' ' + contact.lastname + ' has been added.',
             'success'
         )
     })

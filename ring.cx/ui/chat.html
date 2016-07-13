@@ -15,9 +15,12 @@
         <script src="../libs/js/sweetalert2.min.js"></script>
 
         <!-- homemade -->
+        <script src="js/chatHtmlBuilder.js" async></script>
+
         <link rel="stylesheet" type="text/css" href="css/chat.css"/>
-        <link rel="stylesheet" type="text/css" href="css/swal2.css"/>
         <script src="js/chat.js" async></script>
+
+        <link rel="stylesheet" type="text/css" href="css/swal2.css"/>
     </head>
     <body>
         <div id="container">
@@ -25,7 +28,7 @@
             <div id="left">
                 <div id="chatHistory" class="windowLightStyle">
                     <!-- chatHistoryItems are filled dynamically -->
-                    <!-- Example: -->
+                    <!-- Example:
                     <div class="chatHistoryItem">
                         <div class="chatHistoryItemImage" style="float:left">
                             <i class="fa fa-user fa-3x" aria-hidden="true"></i>
@@ -34,7 +37,7 @@
                             <p>bla bla bla bla</p>
                         </div>
                     </div>
-                    <!-- /Example -->
+                    /Example -->
                 </div>
                 <input id="chatInput" class="windowLightStyle"
                     placeholder="Reply..."></input>
@@ -47,7 +50,7 @@
                 </div>
                 <div id="contacts" class="windowLightStyle">
                     <!-- contactsItems are filled dynamically -->
-                    <!-- Example: -->
+                    <!-- Example:
                     <div class="contactsItem">
                         <div class="contactsItemImage">
                             <i class="fa fa-user fa-3x" aria-hidden="true"></i>
@@ -59,7 +62,7 @@
                             <i class="fa fa-ellipsis-v fa-2x" aria-hidden="true"></i>
                         </div>
                     </div>
-                    <!-- /Example -->
+                    /Example -->
                     <div id="addContact">
                         <i class="fa fa-plus fa-1x" aria-hidden="true"></i>
                     </div>

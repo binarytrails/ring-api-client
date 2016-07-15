@@ -1,5 +1,7 @@
 
-// TODO export sweetAlert and HTML
+/* TODO:
+ *  export sweetAlert and/or HTML
+ */
 
 // Useful elements of the page
 
@@ -10,19 +12,38 @@ var chatHistory = document.getElementById('chatHistory'),
 
 // Extra objects
 
-var accountId  = '1'; // TODO connect to user account
+var accountId  = '1', // TODO load from cookies after account wizard coded
+    contactId = null;
+
+function setInterlocutorContact(ringId)
+{
+    if (contactId)
+    {
+        document.getElementById(contactId).style.background = '#d7f5f0';
+    }
+    contactId = ringId;
+    document.getElementById(ringId).style.background = '#cbf2eb';
+}
 
 // Sweet alert templates
 
-function showContact(contact)
+function showContact()
 {
+    var contact = ringLocalStorage.accountContact(accountId, contactId);
+    if (!contact.profile)
+    {
+        sweetAlert('Error', 'Contact has no profile', 'error');
+    }
+    profile = contact.profile;
+    profile['ringId'] = contactId;
+
     html = "<div class='dynamicHtml'>" +
         "<p>Name:<input id='updateContactName' type='text' value='" +
-            contact.name + "'></p>" +
+            profile.name + "'></p>" +
         "<p>Lastname:<input id='updateContactLastname' type='text' value='" +
-            contact.lastname + "'></p>" +
+            profile.lastname + "'></p>" +
         "<p>Ring ID:<input id='updateContactRingId' type='text' value='" +
-            contact.ringId + "'></p></div>";
+            profile.ringId + "'></p></div>";
 
     sweetAlert({
         title: 'Contact',
@@ -34,12 +55,12 @@ function showContact(contact)
     }).then(
         function() // update
         {
-            contact.name = document.getElementById('updateContactName').value;
-            contact.lastname = document.getElementById('updateContactLastname').value;
+            profile.name = document.getElementById('updateContactName').value;
+            profile.lastname = document.getElementById('updateContactLastname').value;
 
             var ringId = document.getElementById('updateContactRingId').value;
 
-            if (contact.ringId != ringId)
+            if (profile.ringId != ringId)
             {
                 if (document.getElementById(ringId))
                 {
@@ -50,30 +71,30 @@ function showContact(contact)
                     );
                     return;
                 }
-                document.getElementById(contact.ringId).id = ringId;
-                ringLocalStorage.deleteAccountContact(accountId, contact.ringId);
+                document.getElementById(profile.ringId).id = ringId;
+                ringLocalStorage.deleteAccountContact(accountId, profile.ringId);
             }
             document.getElementById(ringId).childNodes[1].innerHTML =
-                '<p>' + contact.name + ' ' + contact.lastname + '</p>';
+                '<p>' + profile.name + ' ' + profile.lastname + '</p>';
 
-            contact.ringId = ringId;
-            ringLocalStorage.saveAccountContact(accountId, contact);
+            profile.ringId = ringId;
+            ringLocalStorage.saveAccountContact(accountId, profile);
 
             sweetAlert(
                 'Updated',
-                contact.name + ' ' + contact.lastname + ' has been updated.',
+                profile.name + ' ' + profile.lastname + ' has been updated.',
                 'success'
             );
         },
         function(dismiss){
             if (dismiss == 'cancel') // delete
             {
-                ringLocalStorage.deleteAccountContact(accountId, contact.ringId);
-                document.getElementById(contact.ringId).remove();
+                ringLocalStorage.deleteAccountContact(accountId, profile.ringId);
+                document.getElementById(profile.ringId).remove();
 
                 sweetAlert(
                     'Deleted',
-                    contact.name + ' ' + contact.lastname + ' has been deleted.',
+                    profile.name + ' ' + profile.lastname + ' has been deleted.',
                     'success'
                 );
             }
@@ -87,19 +108,13 @@ function showContact(contact)
 
 function contactsItemClick()
 {
-    var ringId = this.id,
-        data = JSON.parse(localStorage.getItem('ring.cx'));
+    var ringId = this.id;
+    setInterlocutorContact(ringId);
+}
 
-    try
-    {
-        contact = data[accountId]['contacts'][ringId]['details'];
-    }
-    catch (error)
-    {
-        sweetAlert('Error', error.message, 'error');
-    }
-    contact['ringId'] = ringId;
-    showContact(contact);
+function contactsItemOptionsClick()
+{
+    showContact();
 }
 
 addContact.addEventListener('click', function()
@@ -140,7 +155,7 @@ addContact.addEventListener('click', function()
 
         // Add new contact to HTML UI
         contactsItem = buildHtmlContactsItem(
-                contact.ringId, contact.name + ' ' + contact.lastname);
+            contact.ringId, contact.name + ' ' + contact.lastname);
         contactsItem.addEventListener('click', contactsItemClick, false);
         contacts.insertBefore(contactsItem, addContact);
 
@@ -160,13 +175,29 @@ function initChatHtml()
     {
         for (var ringId in accountContacts)
         {
-            contact = accountContacts[ringId]['details'];
-            contactsItem = buildHtmlContactsItem(ringId,
-                    contact.name + ' ' + contact.lastname);
-            contactsItem.addEventListener('click', contactsItemClick, false);
-            contacts.insertBefore(contactsItem, addContact);
+            var profile = accountContacts[ringId]['profile'];
+            if (profile)
+            {
+                contactsItem = buildHtmlContactsItem(ringId,
+                    profile.name + ' ' + profile.lastname);
+                contactsItem.addEventListener('click', contactsItemClick, false);
+
+                contactsItemOptions = contactsItem.childNodes[2];
+                contactsItemOptions.addEventListener(
+                    'click', contactsItemOptionsClick, false);
+
+                contacts.insertBefore(contactsItem, addContact);
+            }
         }
+        // set first contact as 'talk to'
+        setInterlocutorContact(Object.keys(accountContacts)[0]);
     }
+}
+
+function initChatHistory()
+{
+    //var chatHistory = ringLocalStorage.accountChatHistory(
+    //    accountId, contactId);
 }
 
 // TODO move to account wizard creation

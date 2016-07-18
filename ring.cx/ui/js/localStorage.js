@@ -5,8 +5,15 @@ var ringLocalStorage = {};
 
 ringLocalStorage.accountContacts = function(accountId)
 {
-    var data = JSON.parse(localStorage.getItem('ring.cx'));
-    return data[accountId]['contacts'];
+    var data = JSON.parse(localStorage.getItem('ring.cx')),
+        account = data[accountId];
+
+    if (!account)
+    {
+        throw new Error("Account '" + account + "' doesn't exists");
+    }
+
+    return account['contacts'];
 }
 
 ringLocalStorage.accountContact = function(accountId, contactId)
@@ -72,7 +79,7 @@ ringLocalStorage.accountContactHistory = function(accountId, contactId)
 
     if (!contact)
     {
-        throw new Error("Contact with id '" + contactId + "' doesn't exists");
+        return null;
     }
     else if (contact['history'])
     {

@@ -1,6 +1,7 @@
 
 /* TODO:
  *  replace SweetAlert by Semantics popup
+ *  replace FontAwesome by Semantics Embeded FontAwesome?
  *  chatHistory: hide individual image if he sent the last message
  */
 
@@ -11,10 +12,21 @@ var htmlChatHistory = document.getElementById('chatHistory'),
     htmlContactsItem = document.getElementsByClassName('contactsItem'),
     htmlAddContact = document.getElementById('addContact');
 
-// Globals
+// Global variables
 
-var currentAccountId  = '1', // TODO load from cookies after account wizard coded
+// TODO load from cookies after account wizard is coded
+
+var ringApiUrl = 'http:/127.0.0.1:8080/',
+    currentAccountId  = '2dcb4c8fd4cee100',
     currentContactId = null;
+
+// Init: ensures it is called before Semantic Search callback
+
+initLocalStorage();
+initContacts();
+initChatHistory();
+
+// Global functions
 
 function setInterlocutorContact(ringId)
 {
@@ -143,6 +155,28 @@ $('#chatReply').keypress(function(e)
         var message = '<p>' + $('#chatReply input').val() + '</p>',
             messageStatus = 'sent';
 
+        /*
+        $.ajax({
+            type: 'POST',
+            url: ringApiUrl + 'account/' + currentAccountId + '/message/',
+            data: {
+                ring_id: currentContactId,
+                mime_type: 'text/plain',
+                message: message
+            },
+            sucess: function(data)
+            {
+                console.log(data);
+                return;
+                ringLocalStorage.addAccountContactHistory(currentAccountId,
+                    currentContactId, messageStatus, message);
+
+                var chatHistoryItem = htmlBuilder.chatHistoryItem(message, 'right');
+                htmlChatHistory.appendChild(chatHistoryItem);
+
+            }
+        });
+        */
         ringLocalStorage.addAccountContactHistory(currentAccountId,
             currentContactId, messageStatus, message);
 
@@ -164,14 +198,10 @@ $('.ui.search')
             categoryName    : 'name',        // name of category (category view)
             categoryResults : 'results',     // array of results (category view)
             description     : 'description', // result description
-            image           : 'image',       // result image
             results         : 'results',     // array of results (standard)
-            title           : 'title',       // result title
-            action          : 'action',      // "view more" object name
-            actionText      : 'text',        // "view more" text
-            actionURL       : 'url'          // "view more" url
+            title           : 'title'        // result title
         },
-         onSelect: function(result)
+        onSelect: function(result)
         {
             setInterlocutorContact(result.ringId);
         },
@@ -288,7 +318,6 @@ function initLocalStorage()
     {
         account = data[currentAccountId];
     }
-
     if (!account)
     {
         data[currentAccountId] = {
@@ -297,8 +326,4 @@ function initLocalStorage()
         localStorage.setItem('ring.cx', JSON.stringify(data));
     }
 }
-
-initLocalStorage();
-initContacts();
-initChatHistory();
 

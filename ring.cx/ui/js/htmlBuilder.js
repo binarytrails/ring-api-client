@@ -1,5 +1,31 @@
 
-function buildHtmlContactsItem(id, text)
+var htmlBuilder = {};
+
+htmlBuilder.chatHistoryItem = function(text, cssFloat)
+{
+    var chatHistoryItem = document.createElement("div"),
+        chatHistoryItemImage = document.createElement("div"),
+        chatHistoryItemText = document.createElement("div");
+
+    chatHistoryItem.className = "chatHistoryItem";
+    chatHistoryItemImage.className = "chatHistoryItemImage";
+    chatHistoryItemText.className = "chatHistoryItemText";
+
+    chatHistoryItemImage.innerHTML =
+       '<i class="fa fa-user fa-3x" aria-hidden="true"></i>';
+
+    chatHistoryItemText.innerHTML = text;
+
+    chatHistoryItemImage.style.cssFloat = cssFloat;
+    chatHistoryItemText.style.cssFloat = cssFloat;
+
+    chatHistoryItem.appendChild(chatHistoryItemImage);
+    chatHistoryItem.appendChild(chatHistoryItemText);
+
+    return chatHistoryItem;
+}
+
+htmlBuilder.contactsItem = function(id, text)
 {
     var contactsItem = document.createElement('div'),
         contactsItemImage = document.createElement('div'),

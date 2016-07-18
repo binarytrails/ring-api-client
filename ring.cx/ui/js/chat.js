@@ -154,7 +154,7 @@ addContact.addEventListener('click', function()
         ringLocalStorage.saveAccountContact(accountId, contact);
 
         // Add new contact to HTML UI
-        contactsItem = buildHtmlContactsItem(
+        contactsItem = htmlBuilder.contactsItem(
             contact.ringId, contact.name + ' ' + contact.lastname);
         contactsItem.addEventListener('click', contactsItemClick, false);
         contacts.insertBefore(contactsItem, addContact);
@@ -178,7 +178,7 @@ function initChatHtml()
             var profile = accountContacts[ringId]['profile'];
             if (profile)
             {
-                contactsItem = buildHtmlContactsItem(ringId,
+                contactsItem = htmlBuilder.contactsItem(ringId,
                     profile.name + ' ' + profile.lastname);
                 contactsItem.addEventListener('click', contactsItemClick, false);
 
@@ -196,8 +196,8 @@ function initChatHtml()
 
 function initChatHistory()
 {
-    //var chatHistory = ringLocalStorage.accountChatHistory(
-    //    accountId, contactId);
+    var chatHistory = ringLocalStorage.accountChatHistory(
+        accountId, contactId);
 }
 
 // TODO move to account wizard creation

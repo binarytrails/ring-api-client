@@ -10,33 +10,20 @@ function moqChatHistory()
 
     for (var i = 0; i < 5; i++)
     {
-        var chatHistoryItem = document.createElement("div"),
-            chatHistoryItemImage = document.createElement("div"),
-            chatHistoryItemText = document.createElement("div");
-
-        chatHistoryItem.className = "chatHistoryItem";
-        chatHistoryItemImage.className = "chatHistoryItemImage";
-        chatHistoryItemText.className = "chatHistoryItemText";
-
-        chatHistoryItemImage.innerHTML =
-           '<i class="fa fa-user fa-3x" aria-hidden="true"></i>';
-
         // Conversation
         text = "<p>Bla ";
         for (var j = 0; j < randomInt(10, 500); j++)
         {
             text += "bla ";
         }
-        chatHistoryItemText.innerHTML = (text += "</p>");
+        text += "</p>";
 
         // Alter who talks
         var cssFloat = "right";
         if (i % 2 == 1) cssFloat = "left";
-        chatHistoryItemImage.style.cssFloat = cssFloat;
-        chatHistoryItemText.style.cssFloat = cssFloat;
 
-        chatHistoryItem.appendChild(chatHistoryItemImage);
-        chatHistoryItem.appendChild(chatHistoryItemText);
+        var chatHistoryItem = htmlBuilder.chatHistoryItem(
+            text, cssFloat);
 
         chatHistory.appendChild(chatHistoryItem);
     }
@@ -49,7 +36,7 @@ function moqContacts()
 
     for (var i = 0; i < 5; i++)
     {
-        contactsItem = buildHtmlContactsItem('id-' + i, 'Contact ' + i);
+        var contactsItem = htmlBuilder.contactsItem('id-' + i, 'Contact ' + i);
         contacts.insertBefore(contactsItem, addContact);
     }
 }

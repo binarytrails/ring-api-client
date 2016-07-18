@@ -6,7 +6,7 @@
         <meta name="keywords" content="Ring.cx Web Light Client WebExtension">
         <meta name="author" content="Seva Ivanov">
 
-        <!-- libraries -->
+        <!-- Libraries -->
         <link rel="stylesheet" type="text/css"
             href="../libs/css/font-awesome/css/font-awesome.min.css">
 
@@ -14,19 +14,26 @@
             href="../libs/css/sweetalert2.min.css"/>
         <script src="../libs/js/sweetalert2.min.js"></script>
 
-        <!-- homemade -->
+        <script src="../libs/node_modules/jquery/dist/jquery.min.js"></script>
+
+        <link rel="stylesheet" type="text/css"
+            href="../libs/semantic/dist/semantic.min.css">
+        <script src="../libs/semantic/dist/semantic.min.js"></script>
+
+        <!-- Homemade -->
         <link rel="stylesheet" type="text/css" href="css/swal2.css"/>
 
         <link rel="stylesheet" type="text/css" href="css/chat.css"/>
         <script src="js/chatHtmlBuilder.js"></script>
         <script src="js/localStorage.js"></script>
+        <script src="js/semantic.js"></script>
         <script src="js/chat.js" async></script>
     </head>
     <body>
         <div id="container">
             <div id="top"></div>
             <div id="left">
-                <div id="chatHistory" class="windowLightStyle">
+                <div id="chatHistory" class="windows">
                     <!-- chatHistoryItems are filled dynamically -->
                     <!-- Example:
                     <div class="chatHistoryItem">
@@ -39,16 +46,21 @@
                     </div>
                     /Example -->
                 </div>
-                <input id="chatInput" class="windowLightStyle"
-                    placeholder="Reply..."></input>
+                <div id="chatReply" class="ui icon input windows">
+                    <input type="text" placeholder="Reply...">
+                    <i class="send icon"></i>
+                </div>
             </div>
             <div id="right">
-                <div id="searchContacts" class="windowLightStyle">
-                    <input class="searchIcon" type="submit" value="&#xf002;"></input>
-                    <input id="searchContactsText"
-                        placeholder="Search contacts..."></input>
+                <div id="searchContacts" class="ui search">
+                    <div class="ui icon input windows">
+                        <input class="prompt" type="text"
+                            placeholder="Search contacts...">
+                        <i class="search icon"></i>
+                    </div>
+                    <div class="results"></div>
                 </div>
-                <div id="contacts" class="windowLightStyle">
+                <div id="contacts" class="windows">
                     <!-- contactsItems are filled dynamically -->
                     <!-- Example:
                     <div class="contactsItem">

@@ -227,3 +227,29 @@ function initLocalStorage()
 initLocalStorage();
 initChatHtml();
 
+// Semantic
+
+$('.ui.search')
+    .search({
+        source: ringSemantic.accountContactsSearchFormat(),
+        searchFields: [
+            'ringId', 'name', 'lastname'
+        ],
+        fields: {
+            categories      : 'results',     // array of categories (category view)
+            categoryName    : 'name',        // name of category (category view)
+            categoryResults : 'results',     // array of results (category view)
+            description     : 'description', // result description
+            image           : 'image',       // result image
+            results         : 'results',     // array of results (standard)
+            title           : 'title',       // result title
+            action          : 'action',      // "view more" object name
+            actionText      : 'text',        // "view more" text
+            actionURL       : 'url'          // "view more" url
+        },
+         onSelect: function(result)
+        {
+            setInterlocutorContact(result.ringId);
+        },
+    })
+;

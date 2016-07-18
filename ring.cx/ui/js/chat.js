@@ -1,41 +1,70 @@
 
 /* TODO:
- *  export sweetAlert and/or HTML
+ *  replace SweetAlert by Semantics popup
+ *  chatHistory: hide individual image if he sent the last message
  */
 
-// Useful elements of the page
+// HTML elements of the page
 
-var chatHistory = document.getElementById('chatHistory'),
-    contacts = document.getElementById('contacts'),
-    contactsItem = document.getElementsByClassName('contactsItem'),
-    addContact = document.getElementById('addContact');
+var htmlChatHistory = document.getElementById('chatHistory'),
+    htmlContacts = document.getElementById('contacts'),
+    htmlContactsItem = document.getElementsByClassName('contactsItem'),
+    htmlAddContact = document.getElementById('addContact');
 
-// Extra objects
+// Globals
 
-var accountId  = '1', // TODO load from cookies after account wizard coded
-    contactId = null;
+var currentAccountId  = '1', // TODO load from cookies after account wizard coded
+    currentContactId = null;
 
 function setInterlocutorContact(ringId)
 {
-    if (contactId)
+    if (currentContactId)
     {
-        document.getElementById(contactId).style.background = '#d7f5f0';
+        document.getElementById(currentContactId).style.background = '#d7f5f0';
     }
-    contactId = ringId;
+    currentContactId = ringId;
     document.getElementById(ringId).style.background = '#cbf2eb';
+}
+
+function addChatHistoryItem(item, side, hideImage=false)
+{
+    var chatHistoryItem = htmlBuilder.chatHistoryItem(
+        item.message, side, hideImage);
+    htmlChatHistory.appendChild(chatHistoryItem);
+}
+
+function loadContactChatHistory()
+{
+    htmlChatHistory.innerHTML = '';
+
+    var chatHistory = ringLocalStorage.accountContactHistory(
+        currentAccountId, currentContactId);
+
+    for (var key in chatHistory)
+    {
+        var item = chatHistory[key],
+            side = 'left';
+
+        if (item.messageStatus == 'sent')
+        {
+            side = 'right';
+        }
+
+        addChatHistoryItem(item, side, false);
+    }
 }
 
 // Sweet alert templates
 
 function showContact()
 {
-    var contact = ringLocalStorage.accountContact(accountId, contactId);
+    var contact = ringLocalStorage.accountContact(currentAccountId, currentContactId);
     if (!contact.profile)
     {
         sweetAlert('Error', 'Contact has no profile', 'error');
     }
     profile = contact.profile;
-    profile['ringId'] = contactId;
+    profile['ringId'] = currentContactId;
 
     html = "<div class='dynamicHtml'>" +
         "<p>Name:<input id='updateContactName' type='text' value='" +
@@ -72,13 +101,13 @@ function showContact()
                     return;
                 }
                 document.getElementById(profile.ringId).id = ringId;
-                ringLocalStorage.deleteAccountContact(accountId, profile.ringId);
+                ringLocalStorage.deleteAccountContact(currentAccountId, profile.ringId);
             }
             document.getElementById(ringId).childNodes[1].innerHTML =
                 '<p>' + profile.name + ' ' + profile.lastname + '</p>';
 
             profile.ringId = ringId;
-            ringLocalStorage.saveAccountContact(accountId, profile);
+            ringLocalStorage.saveAccountContact(currentAccountId, profile);
 
             sweetAlert(
                 'Updated',
@@ -89,7 +118,7 @@ function showContact()
         function(dismiss){
             if (dismiss == 'cancel') // delete
             {
-                ringLocalStorage.deleteAccountContact(accountId, profile.ringId);
+                ringLocalStorage.deleteAccountContact(currentAccountId, profile.ringId);
                 document.getElementById(profile.ringId).remove();
 
                 sweetAlert(
@@ -104,12 +133,56 @@ function showContact()
 
 // User Events listeners
 
+// Chat
+
+$('#chatReply').keypress(function(e)
+{
+    // enter key
+    if (e.keyCode == 13)
+    {
+        var message = '<p>' + $('#chatReply input').val() + '</p>',
+            messageStatus = 'sent';
+
+        ringLocalStorage.addAccountContactHistory(currentAccountId,
+            currentContactId, messageStatus, message);
+
+        var chatHistoryItem = htmlBuilder.chatHistoryItem(message, 'right');
+        htmlChatHistory.appendChild(chatHistoryItem);
+    }
+});
+
 // Contacts
+
+$('.ui.search')
+    .search({
+        source: ringSemantic.accountContactsSearchFormat(currentAccountId),
+        searchFields: [
+            'ringId', 'name', 'lastname'
+        ],
+        fields: {
+            categories      : 'results',     // array of categories (category view)
+            categoryName    : 'name',        // name of category (category view)
+            categoryResults : 'results',     // array of results (category view)
+            description     : 'description', // result description
+            image           : 'image',       // result image
+            results         : 'results',     // array of results (standard)
+            title           : 'title',       // result title
+            action          : 'action',      // "view more" object name
+            actionText      : 'text',        // "view more" text
+            actionURL       : 'url'          // "view more" url
+        },
+         onSelect: function(result)
+        {
+            setInterlocutorContact(result.ringId);
+        },
+    })
+;
 
 function contactsItemClick()
 {
     var ringId = this.id;
     setInterlocutorContact(ringId);
+    loadContactChatHistory();
 }
 
 function contactsItemOptionsClick()
@@ -139,8 +212,8 @@ addContact.addEventListener('click', function()
         contact['ringId'] = document.getElementById('newContactRingId').value;
 
         // Validate contact existence
-        var contactsItem = document.getElementById(contact.ringId);
-        if (contactsItem)
+        var htmlContactsItem = document.getElementById(contact.ringId);
+        if (htmlContactsItem)
         {
             sweetAlert(
                 'Contact exists',
@@ -151,13 +224,13 @@ addContact.addEventListener('click', function()
         }
 
         // Ensure data persistence using Local Storage
-        ringLocalStorage.saveAccountContact(accountId, contact);
+        ringLocalStorage.saveAccountContact(currentAccountId, contact);
 
         // Add new contact to HTML UI
-        contactsItem = htmlBuilder.contactsItem(
+        htmlContactsItem = htmlBuilder.contactsItem(
             contact.ringId, contact.name + ' ' + contact.lastname);
-        contactsItem.addEventListener('click', contactsItemClick, false);
-        contacts.insertBefore(contactsItem, addContact);
+        htmlContactsItem.addEventListener('click', contactsItemClick, false);
+        htmlContacts.insertBefore(htmlContactsItem, htmlAddContact);
 
         sweetAlert(
             'Added',
@@ -167,9 +240,11 @@ addContact.addEventListener('click', function()
     })
 });
 
-function initChatHtml()
+// Initializing
+
+function initContacts()
 {
-    var accountContacts = ringLocalStorage.accountContacts(accountId);
+    var accountContacts = ringLocalStorage.accountContacts(currentAccountId);
 
     if (Object.keys(accountContacts).length)
     {
@@ -178,15 +253,15 @@ function initChatHtml()
             var profile = accountContacts[ringId]['profile'];
             if (profile)
             {
-                contactsItem = htmlBuilder.contactsItem(ringId,
+                htmlContactsItem = htmlBuilder.contactsItem(ringId,
                     profile.name + ' ' + profile.lastname);
-                contactsItem.addEventListener('click', contactsItemClick, false);
+                htmlContactsItem.addEventListener('click', contactsItemClick, false);
 
-                contactsItemOptions = contactsItem.childNodes[2];
+                contactsItemOptions = htmlContactsItem.childNodes[2];
                 contactsItemOptions.addEventListener(
                     'click', contactsItemOptionsClick, false);
 
-                contacts.insertBefore(contactsItem, addContact);
+                htmlContacts.insertBefore(htmlContactsItem, htmlAddContact);
             }
         }
         // set first contact as 'talk to'
@@ -196,8 +271,7 @@ function initChatHtml()
 
 function initChatHistory()
 {
-    var chatHistory = ringLocalStorage.accountChatHistory(
-        accountId, contactId);
+    loadContactChatHistory();
 }
 
 // TODO move to account wizard creation
@@ -212,12 +286,12 @@ function initLocalStorage()
     }
     else
     {
-        account = data[accountId];
+        account = data[currentAccountId];
     }
 
     if (!account)
     {
-        data[accountId] = {
+        data[currentAccountId] = {
             'contacts': {}
         };
         localStorage.setItem('ring.cx', JSON.stringify(data));
@@ -225,31 +299,6 @@ function initLocalStorage()
 }
 
 initLocalStorage();
-initChatHtml();
+initContacts();
+initChatHistory();
 
-// Semantic
-
-$('.ui.search')
-    .search({
-        source: ringSemantic.accountContactsSearchFormat(),
-        searchFields: [
-            'ringId', 'name', 'lastname'
-        ],
-        fields: {
-            categories      : 'results',     // array of categories (category view)
-            categoryName    : 'name',        // name of category (category view)
-            categoryResults : 'results',     // array of results (category view)
-            description     : 'description', // result description
-            image           : 'image',       // result image
-            results         : 'results',     // array of results (standard)
-            title           : 'title',       // result title
-            action          : 'action',      // "view more" object name
-            actionText      : 'text',        // "view more" text
-            actionURL       : 'url'          // "view more" url
-        },
-         onSelect: function(result)
-        {
-            setInterlocutorContact(result.ringId);
-        },
-    })
-;

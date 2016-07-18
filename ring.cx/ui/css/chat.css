@@ -98,9 +98,10 @@ html, body
 
                     .chatHistoryItemText
                     {
-                        width: 80%;
+                        width: auto;
                         height 98%;
                         margin: 1%;
+                        padding: 1% 2%;
                         border-radius: 10px 10px 10px 10px;
                         -moz-border-radius: 10px 10px 10px 10px;
                         -webkit-border-radius: 10px 10px 10px 10px;

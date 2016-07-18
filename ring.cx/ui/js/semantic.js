@@ -1,7 +1,7 @@
 
 var ringSemantic = {}
 
-ringSemantic.accountContactsSearchFormat = function()
+ringSemantic.accountContactsSearchFormat = function(accountId)
 {
     var searchArray = new Array(),
         accountContacts = ringLocalStorage.accountContacts(accountId);

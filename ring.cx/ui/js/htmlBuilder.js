@@ -1,7 +1,7 @@
 
 var htmlBuilder = {};
 
-htmlBuilder.chatHistoryItem = function(text, cssFloat)
+htmlBuilder.chatHistoryItem = function(text, cssFloat, hideImage=false)
 {
     var chatHistoryItem = document.createElement("div"),
         chatHistoryItemImage = document.createElement("div"),
@@ -11,9 +11,11 @@ htmlBuilder.chatHistoryItem = function(text, cssFloat)
     chatHistoryItemImage.className = "chatHistoryItemImage";
     chatHistoryItemText.className = "chatHistoryItemText";
 
-    chatHistoryItemImage.innerHTML =
-       '<i class="fa fa-user fa-3x" aria-hidden="true"></i>';
-
+    if (!hideImage)
+    {
+        chatHistoryItemImage.innerHTML =
+            '<i class="fa fa-user fa-3x" aria-hidden="true"></i>';
+    }
     chatHistoryItemText.innerHTML = text;
 
     chatHistoryItemImage.style.cssFloat = cssFloat;

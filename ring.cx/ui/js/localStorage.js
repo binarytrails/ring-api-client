@@ -72,21 +72,26 @@ ringLocalStorage.accountContactHistory = function(accountId, contactId)
 
     if (!contact)
     {
-        return new Error("Contact with id '" + contactId + "' doesn't exists");
+        throw new Error("Contact with id '" + contactId + "' doesn't exists");
     }
-    else if (!contact['history'])
+    else if (contact['history'])
     {
-        return new Error("Contact with id '" + contactId + "' has no history");
+        return contact['history'];
     }
-    return contact['history'];
 }
 
 ringLocalStorage.addAccountContactHistory = function(
-    accountId, contactId, whom, value)
+    accountId, contactId, messageStatus, message)
 {
-    if (!(whom == 'you' || whom == 'him'))
+    if (!message)
     {
-        return new Error("The argument 'whom' should be 'you' or 'him'");
+        throw new Error('No messageStatus provided');
+    }
+
+    if (!(messageStatus == 'sent' || messageStatus == 'received'))
+    {
+        throw new Error("The messageStatus is not in the list " +
+            "('sent', 'received')");
     }
 
     var data = JSON.parse(localStorage.getItem('ring.cx')),
@@ -99,8 +104,8 @@ ringLocalStorage.addAccountContactHistory = function(
     }
 
     history[Date()] = {
-        whom: whom,
-        value: value
+        message: message,
+        messageStatus: messageStatus
     }
 
     data[accountId]['contacts'][contactId]['history'] = history;
@@ -116,11 +121,11 @@ ringLocalStorage.deleteContactHistory = function(accountId, contactId)
 
     if (!contact)
     {
-        return new Error("Contact with id '" + contactId + "' doesn't exists");
+        throw new Error("Contact with id '" + contactId + "' doesn't exists");
     }
     else if (!contact['history'])
     {
-        return new Error("Contact with id '" + contactId + "' has no history");
+        throw new Error("Contact with id '" + contactId + "' has no history");
     }
 
     delete data[accountId]['contacts'][contactId]['history'];

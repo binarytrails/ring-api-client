@@ -7,13 +7,6 @@
         <meta name="author" content="Seva Ivanov">
 
         <!-- Libraries -->
-        <link rel="stylesheet" type="text/css"
-            href="../libs/css/font-awesome/css/font-awesome.min.css">
-
-        <link rel="stylesheet" type="text/css"
-            href="../libs/css/sweetalert2.min.css"/>
-        <script src="../libs/js/sweetalert2.min.js"></script>
-
         <script src="../libs/node_modules/jquery/dist/jquery.min.js"></script>
 
         <link rel="stylesheet" type="text/css"
@@ -34,17 +27,7 @@
             <div id="top"></div>
             <div id="left">
                 <div id="chatHistory" class="windows">
-                    <!-- chatHistoryItems are filled dynamically -->
-                    <!-- Example:
-                    <div class="chatHistoryItem">
-                        <div class="chatHistoryItemImage" style="float:left">
-                            <i class="fa fa-user fa-3x" aria-hidden="true"></i>
-                        </div>
-                        <div class="chatHistoryItemText" style="float:left">
-                            <p>bla bla bla bla</p>
-                        </div>
-                    </div>
-                    /Example -->
+                    <!-- Filled dynamically -->
                 </div>
                 <div id="chatReply" class="ui icon input windows">
                     <input type="text" placeholder="Reply...">
@@ -61,23 +44,61 @@
                     <div class="results"></div>
                 </div>
                 <div id="contacts" class="windows">
-                    <!-- contactsItems are filled dynamically -->
-                    <!-- Example:
-                    <div class="contactsItem">
-                        <div class="contactsItemImage">
-                            <i class="fa fa-user fa-3x" aria-hidden="true"></i>
-                        </div>
-                        <div class="contactsItemText">
-                            <p>Bristlecone Pine</p>
-                        </div>
-                        <div class="contactsItemOptions">
-                            <i class="fa fa-ellipsis-v fa-2x" aria-hidden="true"></i>
-                        </div>
-                    </div>
-                    /Example -->
+                    <!-- Filled dynamically -->
                     <div id="addContact">
-                        <i class="fa fa-plus fa-1x" aria-hidden="true"></i>
+                        <i class="plus icon"></i>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div id="contactModal" class="ui modal">
+            <i class="close icon"></i>
+            <div id="contactModalHeader" class="header">
+                <!-- Filled dynamically -->
+            </div>
+            <div class="image content">
+                <!-- TODO add image -->
+                <div class="description">
+                    <div class="ui form">
+                        <div class="fields">
+                            <div class="field four wide">
+                                <label>First name</label>
+                                <input id="contactModalName"
+                                    type="text" placeholder="First Name">
+                            </div>
+                            <div class="field four wide">
+                                <label>Last name</label>
+                                <input id="contactModalLastname"
+                                    type="text" placeholder="Last Name">
+                            </div>
+                            <div class="field seven wide">
+                                <label>Ring ID</label>
+                                <input id="contactModalRingId"
+                                    type="text" placeholder="Ring ID">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="contactModalError" class="ui negative message"
+                    style="display:none; width:98%; margin-left:1%;">
+                <i id="contactModalErrorClose" class="close icon"></i>
+                <div id="contactModalErrorHeader" class="header">
+                    <!-- Filled dynamically -->
+                </div>
+                <p id="contactModalErrorMessage">
+                    <!-- Filled dynamically -->
+                </p>
+            </div>
+            <div class="actions">
+                <div class="ui black deny button">
+                    <p id="contactModalDeny">
+                        <!-- Filled dynamically -->
+                    </p>
+                </div>
+                <div id="createContact" class="ui positive right labeled icon button">
+                    Submit
+                    <i class="checkmark icon"></i>
                 </div>
             </div>
         </div>

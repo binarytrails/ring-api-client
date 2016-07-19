@@ -35,7 +35,11 @@ function setInterlocutorContact(ringId)
         document.getElementById(currentContactId).style.background = '#d7f5f0';
     }
     currentContactId = ringId;
-    document.getElementById(ringId).style.background = '#cbf2eb';
+    var htmlContact = document.getElementById(ringId);
+    if (htmlContact)
+    {
+        htmlContact.style.background = '#cbf2eb';
+    }
 }
 
 function addChatHistoryItem(item, side, hideImage=false)
@@ -73,44 +77,38 @@ function showContact()
     var contact = ringLocalStorage.accountContact(currentAccountId, currentContactId);
     if (!contact.profile)
     {
-        sweetAlert('Error', 'Contact has no profile', 'error');
+        throw new Error('Contact has no profile');
     }
     profile = contact.profile;
     profile['ringId'] = currentContactId;
 
-    html = "<div class='dynamicHtml'>" +
-        "<p>Name:<input id='updateContactName' type='text' value='" +
-            profile.name + "'></p>" +
-        "<p>Lastname:<input id='updateContactLastname' type='text' value='" +
-            profile.lastname + "'></p>" +
-        "<p>Ring ID:<input id='updateContactRingId' type='text' value='" +
-            profile.ringId + "'></p></div>";
+    $('#contactModalHeader').text('Update Contact');
+    $('#contactModalDeny').text('Delete');
+    $('#contactModalName').val(profile.name);
+    $('#contactModalLastname').val(profile.lastname);
+    $('#contactModalRingId').val(profile.ringId);
+    
+    $('#contactModal').modal({
+        onApprove: function() {
 
-    sweetAlert({
-        title: 'Contact',
-        html: html,
-        confirmButtonText: 'Update',
-        showCancelButton: true,
-        cancelButtonText: 'Delete'
-
-    }).then(
-        function() // update
-        {
-            profile.name = document.getElementById('updateContactName').value;
-            profile.lastname = document.getElementById('updateContactLastname').value;
-
-            var ringId = document.getElementById('updateContactRingId').value;
-
+            var ringId = $('#contactModalRingId').val();
+            
+            var profile = {};
+            profile.name = $('#contactModalName').val();
+            profile.lastname = $('#contactModalLastname').val();
+            
             if (profile.ringId != ringId)
             {
                 if (document.getElementById(ringId))
                 {
-                    sweetAlert(
-                        'Contact exists',
-                        'Contact with RingId "' + ringId  + '" exists.',
-                        'error'
+                    $('#contactModalErrorHeader').text('Not a new contact');
+                    $('#contactModalErrorMessage').text(
+                        'There is a contact with the same Ring ID. ' +
+                        'Please, modify the existing one.'
                     );
-                    return;
+                    $('#contactModalError').show();
+                    $('#contactModal').show();
+                    return false;
                 }
                 document.getElementById(profile.ringId).id = ringId;
                 ringLocalStorage.deleteAccountContact(currentAccountId, profile.ringId);
@@ -120,28 +118,13 @@ function showContact()
 
             profile.ringId = ringId;
             ringLocalStorage.saveAccountContact(currentAccountId, profile);
-
-            sweetAlert(
-                'Updated',
-                profile.name + ' ' + profile.lastname + ' has been updated.',
-                'success'
-            );
         },
-        function(dismiss){
-            if (dismiss == 'cancel') // delete
-            {
-                ringLocalStorage.deleteAccountContact(currentAccountId, profile.ringId);
-                document.getElementById(profile.ringId).remove();
-
-                sweetAlert(
-                    'Deleted',
-                    profile.name + ' ' + profile.lastname + ' has been deleted.',
-                    'success'
-                );
-            }
+        onDeny: function() {
+            ringLocalStorage.deleteAccountContact(currentAccountId, profile.ringId);
+            document.getElementById(profile.ringId).remove();
         }
-    );
-}
+    }).modal('show');
+};
 
 // User Events listeners
 
@@ -220,54 +203,44 @@ function contactsItemOptionsClick()
     showContact();
 }
 
-addContact.addEventListener('click', function()
+$('#addContact').click(function()
 {
-    html = "<div class='dynamicHtml'>" +
-        "<p>Name:<input id='newContactName' type='text'></p>" +
-        "<p>Lastname:<input id='newContactLastname' type='text'></p>" +
-        "<p>Ring ID:<input id='newContactRingId' type='text'></p></div>";
+    $('#contactModalHeader').text('New Contact');
+    $('#contactModalDeny').text('Cancel');
+    
+    $('#contactModal').modal({
+        onApprove: function() {
+            var contact = {};
+            contact.name = $('#contactModalName').val();
+            contact.lastname = $('#contactModalLastname').val();
+            contact.ringId = $('#contactModalRingId').val();
 
-    sweetAlert({
-        title: 'New Contact',
-        html: html,
-        showCancelButton: true,
-        confirmButtonText: 'Submit',
-        showLoaderOnConfirm: true
+            // Validate contact existence
+            var htmlContactsItem = document.getElementById(contact.ringId);
+            if (htmlContactsItem)
+            {
+                $('#contactModalErrorHeader').text('Not a new contact');
+                $('#contactModalErrorMessage').text(
+                    'There is a contact with the same Ring ID. ' +
+                    'Please, modify the existing one.'
+                );
+                $('#contactModalError').show();
+                $('#contactModal').show();
+                return false;
+            }
+            // Ensure data persistence using Local Storage
+            ringLocalStorage.saveAccountContact(currentAccountId, contact);
 
-    }).then(function()
-    {
-        var contact = {};
-        contact['name'] = document.getElementById('newContactName').value;
-        contact['lastname'] = document.getElementById('newContactLastname').value;
-        contact['ringId'] = document.getElementById('newContactRingId').value;
-
-        // Validate contact existence
-        var htmlContactsItem = document.getElementById(contact.ringId);
-        if (htmlContactsItem)
-        {
-            sweetAlert(
-                'Contact exists',
-                contact.name + ' ' + contact.lastname + ' is not a new contact.',
-                'error'
-            );
-            return;
+            // Add new contact to HTML UI
+            htmlContactsItem = htmlBuilder.contactsItem(
+                contact.ringId, contact.name + ' ' + contact.lastname);
+            htmlContactsItem.addEventListener('click', contactsItemClick, false);
+            htmlContacts.insertBefore(htmlContactsItem, htmlAddContact);
         }
-
-        // Ensure data persistence using Local Storage
-        ringLocalStorage.saveAccountContact(currentAccountId, contact);
-
-        // Add new contact to HTML UI
-        htmlContactsItem = htmlBuilder.contactsItem(
-            contact.ringId, contact.name + ' ' + contact.lastname);
-        htmlContactsItem.addEventListener('click', contactsItemClick, false);
-        htmlContacts.insertBefore(htmlContactsItem, htmlAddContact);
-
-        sweetAlert(
-            'Added',
-            contact.name + ' ' + contact.lastname + ' has been added.',
-            'success'
-        )
-    })
+    }).modal('show');
+});
+$('#contactModalErrorClose').click(function(){
+    $('#contactModalError').hide();
 });
 
 // Initializing

@@ -13,8 +13,7 @@ htmlBuilder.chatHistoryItem = function(text, cssFloat, hideImage=false)
 
     if (!hideImage)
     {
-        chatHistoryItemImage.innerHTML =
-            '<i class="fa fa-user fa-3x" aria-hidden="true"></i>';
+        chatHistoryItemImage.innerHTML = '<i class="huge spy icon"></i>';
     }
     chatHistoryItemText.innerHTML = text;
 
@@ -41,13 +40,11 @@ htmlBuilder.contactsItem = function(id, text)
     contactsItemText.className = 'contactsItemText';
     contactsItemOptions.className = 'contactsItemOptions';
 
-    contactsItemImage.innerHTML =
-       '<i class="fa fa-user fa-3x" aria-hidden="true"></i>';
+    contactsItemImage.innerHTML = '<i class="big user icon"></i>';
 
     contactsItemText.innerHTML = '<p>' + text + '</p>';
 
-    contactsItemOptions.innerHTML =
-        '<i class="fa fa-ellipsis-v fa-2x" aria-hidden="true"></i>';
+    contactsItemOptions.innerHTML = '<i class="big ellipsis vertical icon"></i>';
 
     contactsItem.appendChild(contactsItemImage);
     contactsItem.appendChild(contactsItemText);

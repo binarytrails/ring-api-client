@@ -1,5 +1,6 @@
 
 /* TODO:
+ *  store / load mime_type in chat history
  *  add profile image
  *  chatHistory: hide same user image if the last history item is his
  */
@@ -21,7 +22,8 @@ var htmlChatHistory = document.getElementById('chatHistory'),
 
 // TODO load from cookies after account wizard is coded
 
-var ringApiUrl = 'http:/127.0.0.1:8080/',
+var ringApiHttp = 'http:/127.0.0.1:8080/',
+    ringApiWs = new WebSocket("ws://127.0.0.1:5678/"),
     currentAccountId  = '2dcb4c8fd4cee100',
     currentContactId = null;
 
@@ -95,7 +97,7 @@ $('#chatReply').keypress(function(e)
         /*
         $.ajax({
             type: 'POST',
-            url: ringApiUrl + 'account/' + currentAccountId + '/message/',
+            url: ringApiHttp + 'account/' + currentAccountId + '/message/',
             data: {
                 ring_id: currentContactId,
                 mime_type: 'text/plain',
@@ -114,9 +116,11 @@ $('#chatReply').keypress(function(e)
             }
         });
         */
+        // save to storage
         ringLocalStorage.addAccountContactHistory(currentAccountId,
             currentContactId, messageStatus, message);
 
+        // add to html
         var chatHistoryItem = htmlBuilder.chatHistoryItem(message, 'right');
         htmlChatHistory.appendChild(chatHistoryItem);
     }
@@ -289,6 +293,47 @@ $('#contactModal').keypress(function(e)
     }
 });
 */
+
+// Websockets callbacks
+
+ringApiWs.onmessage = function(event)
+{
+    var data = JSON.parse(event.data);
+
+    if (data.account_message)
+    {
+        var message = data.account_message,
+            messageStatus = 'received',
+            ringId = message.from_ring_id,
+            content = message.content;
+
+        var contact = ringLocalStorage.accountContact(currentAccountId, ringId);
+
+        if (contact)
+        {
+            var textPlain = content['text/plain']; // TODO change: see top list
+
+            // save to storage
+            ringLocalStorage.addAccountContactHistory(
+                currentAccountId, ringId, messageStatus, textPlain);
+
+            // add to html
+            var chatHistoryItem = htmlBuilder.chatHistoryItem(
+                textPlain, 'left');
+            htmlChatHistory.appendChild(chatHistoryItem);
+        }
+    }
+};
+
+ringApiWs.onopen = function(event)
+{
+    console.log('Ring API websocket opened');
+};
+
+ringApiWs.onclose = function(event)
+{
+    console.log('Ring API websocket closed');
+};
 
 // Initializing
 

@@ -6,7 +6,7 @@
  */
 
 /* FIXME:
- * switch conversation on new interlocutor
+ * ensure saving chat history if sent / received quickly
  * enter key to create / update contact
  * search not working without refresh on update / create contact
  */
@@ -35,7 +35,14 @@ initChatHistory();
 
 // Global functions
 
-function setInterlocutorContact(ringId)
+function initChatHistory()
+{
+    loadContactChatHistory();
+    $('#chatReply input').focus();
+    scrolldownChatHistory();
+}
+
+function talkToContact(ringId)
 {
     // set current background to default
     var htmlContact = document.getElementById(currentContactId);
@@ -53,6 +60,8 @@ function setInterlocutorContact(ringId)
     {
         htmlContact.style.background = '#cbf2eb';
     }
+
+    initChatHistory()
 }
 
 function addChatHistoryItem(item, side, hideImage=false)
@@ -60,6 +69,13 @@ function addChatHistoryItem(item, side, hideImage=false)
     var chatHistoryItem = htmlBuilder.chatHistoryItem(
         item.message, side, hideImage);
     htmlChatHistory.appendChild(chatHistoryItem);
+}
+
+function scrolldownChatHistory()
+{
+    $('#chatHistory').animate({
+        scrollTop: $('#chatHistory').prop("scrollHeight")
+    }, 0);
 }
 
 function loadContactChatHistory()
@@ -147,8 +163,7 @@ $('.ui.search')
         },
         onSelect: function(result)
         {
-            setInterlocutorContact(result.ringId);
-            loadContactChatHistory();
+            talkToContact(result.ringId);
         },
     })
 ;
@@ -157,15 +172,13 @@ $('.ui.search .results').css({'width': '100%'});
 function selectContact()
 {
     var ringId = this.id;
-    setInterlocutorContact(ringId);
-    loadContactChatHistory();
-    $('#chatReply input').focus();
+    talkToContact(ringId);
 }
 
 function updateContact()
 {
     var contactId = $(this).parent()[0].id;
-    setInterlocutorContact(contactId);
+    talkToContact(contactId);
 
     var contact = ringLocalStorage.accountContact(
         currentAccountId, currentContactId);
@@ -253,6 +266,7 @@ function addContact()
         );
         $('#contactModalError').show();
         $('#contactModal').show();
+
         return false;
     }
     // Ensure data persistence using Local Storage
@@ -266,6 +280,9 @@ function addContact()
     contactsItemOptions.addEventListener(
         'click', updateContact, false);
     htmlContacts.insertBefore(htmlContact, htmlAddContact);
+
+    talkToContact(contact.ringId);
+
     return true;
 }
 
@@ -366,13 +383,8 @@ function initContacts()
             }
         }
         // set first contact as 'talk to'
-        setInterlocutorContact(Object.keys(accountContacts)[0]);
+        talkToContact(Object.keys(accountContacts)[0]);
     }
-}
-
-function initChatHistory()
-{
-    loadContactChatHistory();
 }
 
 // TODO move to account wizard creation

@@ -2,9 +2,11 @@
 
 ## Dependecies
 
+### User Interface
+
 It depends on JQuery & Semantics UI. We build it with everything from Semantics UI but later we shall desactivate many of the unused features.
 
-    $ cd libs/
+    $ cd ui/libs/
     $ npm install
 
     ? Set-up Semantic UI

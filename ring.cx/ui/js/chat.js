@@ -267,6 +267,7 @@ function addContact()
 $('#addContact').click(function()
 {
     $('#contactModalHeader').text('New Contact');
+    $('#contactModalError').hide();
     $('#contactModalDeny').text('Cancel');
     $('#contactModalName').val('');
     $('#contactModalLastname').val('');

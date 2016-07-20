@@ -145,9 +145,11 @@ $('.ui.search')
         onSelect: function(result)
         {
             setInterlocutorContact(result.ringId);
+            loadContactChatHistory();
         },
     })
 ;
+$('.ui.search .results').css({'width': '100%'});
 
 function contactClick()
 {

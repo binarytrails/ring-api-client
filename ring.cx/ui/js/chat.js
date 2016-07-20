@@ -89,7 +89,7 @@ function loadContactChatHistory()
 
 $('#chatReply').keypress(function(e)
 {
-    if (e.keyCode == 13) // enter
+    if (e.keyCode == 13) // Enter
     {
         var message = '<p>' + $('#chatReply input').val() + '</p>',
             messageStatus = 'sent';
@@ -123,6 +123,9 @@ $('#chatReply').keypress(function(e)
         // add to html
         var chatHistoryItem = htmlBuilder.chatHistoryItem(message, 'right');
         htmlChatHistory.appendChild(chatHistoryItem);
+
+        // reset input
+        $('#chatReply input').val('');
     }
 });
 
@@ -151,14 +154,15 @@ $('.ui.search')
 ;
 $('.ui.search .results').css({'width': '100%'});
 
-function contactClick()
+function selectContact()
 {
     var ringId = this.id;
     setInterlocutorContact(ringId);
     loadContactChatHistory();
+    $('#chatReply input').focus();
 }
 
-function contactsItemOptionsClick()
+function updateContact()
 {
     var contactId = $(this).parent()[0].id;
     setInterlocutorContact(contactId);
@@ -205,6 +209,7 @@ function contactsItemOptionsClick()
                 // New Ring Id means we have to delete the current
                 ringLocalStorage.deleteAccountContact(
                     currentAccountId, currentContactId);
+
                 // Update HTML
                 document.getElementById(currentContactId).id = ringId;
             }
@@ -215,10 +220,9 @@ function contactsItemOptionsClick()
             profile.name = $('#contactModalName').val();
             profile.lastname = $('#contactModalLastname').val();
 
-            console.log(profile);
-
             // Update HTML
-            $('#' +ringId+ '.text').html(profile.name +' '+ profile.lastname);
+            $('#' + ringId + ' .text').html(
+                profile.name + ' ' + profile.lastname);
 
             ringLocalStorage.saveAccountContact(currentAccountId, profile);
         },
@@ -257,10 +261,10 @@ function addContact()
     // Add new contact to HTML UI
     htmlContact = htmlBuilder.contact(
         contact.ringId, contact.name + ' ' + contact.lastname);
-    htmlContact.addEventListener('click', contactClick, false);
+    htmlContact.addEventListener('click', selectContact, false);
     var contactsItemOptions = htmlContact.childNodes[2];
     contactsItemOptions.addEventListener(
-        'click', contactsItemOptionsClick, false);
+        'click', updateContact, false);
     htmlContacts.insertBefore(htmlContact, htmlAddContact);
     return true;
 }
@@ -352,11 +356,11 @@ function initContacts()
             {
                 htmlContact = htmlBuilder.contact(ringId,
                     profile.name + ' ' + profile.lastname);
-                htmlContact.addEventListener('click', contactClick, false);
+                htmlContact.addEventListener('click', selectContact, false);
 
                 contactsItemOptions = htmlContact.childNodes[2];
                 contactsItemOptions.addEventListener(
-                    'click', contactsItemOptionsClick, false);
+                    'click', updateContact, false);
 
                 htmlContacts.insertBefore(htmlContact, htmlAddContact);
             }

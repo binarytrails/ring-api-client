@@ -157,23 +157,38 @@ html, body
                 overflow-y: auto;
             }
 
-                /* All child items */
-                #contacts > *
+                #contacts .label
                 {
                     width: 98%;
                     margin: 1%;
-                    overflow: hidden;
+                    margin-bottom: 0;
                     border-radius: 2px 2px 2px 2px;
                     -moz-border-radius: 2px 2px 2px 2px;
                     -webkit-border-radius: 2px 2px 2px 2px;
+
                     background: #d7f5f0;
                     cursor: pointer;
+                    font-size: 1.4em;
+                }
+
+                #contacts .text
+                {
+                    font-style: normal;
+                }
+
+                #contacts .ellipsis
+                {
+                    float: right;
+                    margin: 0.2em 0 0 .5em;
+                    opacity: .5;
                 }
 
                 #contacts #addContact
                 {
                     height: 3em;
                     text-align: center;
+                    margin: 1%;
+                    background: #d7f5f0;
                 }
                     #contacts #addContact:hover
                     {
@@ -184,73 +199,4 @@ html, body
                     {
                         line-height: 3em;
                     }
-
-                .contactsItem
-                {
-                }
-                    .contactsItem:hover
-                    {
-                        background: #cbf2eb;
-                    }
-
-                    /* All children */
-                    .contactsItem > *
-                    {
-                        display: inline-block;
-                        text-align: center;
-                        vertical-align: middle;
-                        float: left;
-                        margin: 2%;
-                    }
-
-                    .contactsItemImage
-                    {
-                        position: relative;
-                        width: 3em;
-                        height: 3em;
-                        overflow: hidden;
-                        border-radius: 50%;
-                        -moz-border-radius: 50%;
-                        -webkit-border-radius: 50%;
-                        background: #d7f5f0;
-                    }
-
-                        /* Placeholder FontAwesome icon */
-                        .contactsItemImage > i
-                        {
-                            display: inline-block;
-                            text-align: center;
-                            vertical-align: middle;
-                            opacity: 0.8;
-                        }
-
-                    .contactsItemText
-                    {
-                        padding: 0 2%;
-                        overflow: hidden;
-                    }
-
-                        .contactsItemText > p
-                        {
-                        }
-
-                    .contactsItemOptions
-                    {
-                        width: 5%;
-                        height: auto;
-                        float: right;
-                        padding: 0.3%;
-                        margin-top: 0.8em; /* FIXME: verical-align hack */
-                        border-radius: 2px 2px 2px 2px;
-                        -moz-border-radius: 2px 2px 2px 2px;
-                        -webkit-border-radius: 2px 2px 2px 2px;
-                    }
-
-                        /* FontAwesome icon */
-                        .contactsItemOptions > i
-                        {
-                            width: 100%;
-                            text-align: center;
-                            opacity: 0.8;
-                        }
 

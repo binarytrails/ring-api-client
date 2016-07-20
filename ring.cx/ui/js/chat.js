@@ -15,7 +15,7 @@
 
 var htmlChatHistory = document.getElementById('chatHistory'),
     htmlContacts = document.getElementById('contacts'),
-    htmlContactsItem = document.getElementsByClassName('contactsItem'),
+    htmlContact = document.getElementsByClassName('contact'),
     htmlAddContact = document.getElementById('addContact');
 
 // Global variables
@@ -149,7 +149,7 @@ $('.ui.search')
     })
 ;
 
-function contactsItemClick()
+function contactClick()
 {
     var ringId = this.id;
     setInterlocutorContact(ringId);
@@ -216,8 +216,7 @@ function contactsItemOptionsClick()
             console.log(profile);
 
             // Update HTML
-            document.getElementById(ringId).childNodes[1].innerHTML =
-                '<p>' + profile.name + ' ' + profile.lastname + '</p>';
+            $('#' +ringId+ '.text').html(profile.name +' '+ profile.lastname);
 
             ringLocalStorage.saveAccountContact(currentAccountId, profile);
         },
@@ -238,8 +237,8 @@ function addContact()
     contact.ringId = $('#contactModalRingId').val();
 
     // Validate contact existence
-    var htmlContactsItem = document.getElementById(contact.ringId);
-    if (htmlContactsItem)
+    var htmlContact = document.getElementById(contact.ringId);
+    if (htmlContact)
     {
         $('#contactModalErrorHeader').text('Not a new contact');
         $('#contactModalErrorMessage').text(
@@ -254,13 +253,13 @@ function addContact()
     ringLocalStorage.saveAccountContact(currentAccountId, contact);
 
     // Add new contact to HTML UI
-    htmlContactsItem = htmlBuilder.contactsItem(
+    htmlContact = htmlBuilder.contact(
         contact.ringId, contact.name + ' ' + contact.lastname);
-    htmlContactsItem.addEventListener('click', contactsItemClick, false);
-    var contactsItemOptions = htmlContactsItem.childNodes[2];
+    htmlContact.addEventListener('click', contactClick, false);
+    var contactsItemOptions = htmlContact.childNodes[2];
     contactsItemOptions.addEventListener(
         'click', contactsItemOptionsClick, false);
-    htmlContacts.insertBefore(htmlContactsItem, htmlAddContact);
+    htmlContacts.insertBefore(htmlContact, htmlAddContact);
     return true;
 }
 
@@ -349,15 +348,15 @@ function initContacts()
             var profile = accountContacts[ringId]['profile'];
             if (profile)
             {
-                htmlContactsItem = htmlBuilder.contactsItem(ringId,
+                htmlContact = htmlBuilder.contact(ringId,
                     profile.name + ' ' + profile.lastname);
-                htmlContactsItem.addEventListener('click', contactsItemClick, false);
+                htmlContact.addEventListener('click', contactClick, false);
 
-                contactsItemOptions = htmlContactsItem.childNodes[2];
+                contactsItemOptions = htmlContact.childNodes[2];
                 contactsItemOptions.addEventListener(
                     'click', contactsItemOptionsClick, false);
 
-                htmlContacts.insertBefore(htmlContactsItem, htmlAddContact);
+                htmlContacts.insertBefore(htmlContact, htmlAddContact);
             }
         }
         // set first contact as 'talk to'

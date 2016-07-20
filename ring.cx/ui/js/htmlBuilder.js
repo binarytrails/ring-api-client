@@ -26,30 +26,30 @@ htmlBuilder.chatHistoryItem = function(text, cssFloat, hideImage=false)
     return chatHistoryItem;
 }
 
-htmlBuilder.contactsItem = function(id, text)
+htmlBuilder.contact = function(id, firstLastNames, imageSrc=null)
 {
-    var contactsItem = document.createElement('div'),
-        contactsItemImage = document.createElement('div'),
-        contactsItemText = document.createElement('div');
-        contactsItemOptions = document.createElement('div');
+    var contacts = document.createElement('div'),
+        image = document.createElement('img'),
+        text = document.createElement('i');
+        options = document.createElement('i');
 
-    contactsItem.id = id;
+    contacts.id = id;
 
-    contactsItem.className = 'contactsItem';
-    contactsItemImage.className = 'contactsItemImage';
-    contactsItemText.className = 'contactsItemText';
-    contactsItemOptions.className = 'contactsItemOptions';
+    contacts.className = 'ui label contact';
+    image.className = 'ui right spaced avatar image';
+    text.className = 'text';
+    options.className = 'large ellipsis vertical icon options';
 
-    contactsItemImage.innerHTML = '<i class="big user icon"></i>';
+    if (!imageSrc)
+    {
+        image.src = 'images/avatar/large/white-image.png';
+    }
+    text.innerHTML = firstLastNames;
 
-    contactsItemText.innerHTML = '<p>' + text + '</p>';
+    contacts.appendChild(image);
+    contacts.appendChild(text);
+    contacts.appendChild(options);
 
-    contactsItemOptions.innerHTML = '<i class="big ellipsis vertical icon"></i>';
-
-    contactsItem.appendChild(contactsItemImage);
-    contactsItem.appendChild(contactsItemText);
-    contactsItem.appendChild(contactsItemOptions);
-
-    return contactsItem;
+    return contacts;
 }
 

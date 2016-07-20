@@ -51,30 +51,53 @@
                 </div>
             </div>
         </div>
-        <div id="contactModal" class="ui modal">
+        <div id="contactModal" class="ui modal" >
             <i class="close icon"></i>
-            <div id="contactModalHeader" class="header">
+            <div id="contactModalHeader" class="header"style="background:#d7f5f0;">
                 <!-- Filled dynamically -->
             </div>
             <div class="image content">
-                <!-- TODO add image -->
-                <div class="description">
-                    <div class="ui form">
-                        <div class="fields">
-                            <div class="field four wide">
-                                <label>First name</label>
-                                <input id="contactModalName"
-                                    type="text" placeholder="First Name">
+                <div class="ui medium image">
+                    <img src="images/avatar/large/white-image.png">
+                </div>
+                <div class="description" style="width:100%;">
+                    <div class="ui equal width padded grid" style="height:100%;width:100%;">
+                        <div class="row">
+                            <div class="column">
+                                <div class="ui labeled input">
+                                    <div class="ui label" style="background:#d7f5f0">
+                                        Name
+                                    </div>
+                                    <input id="contactModalName"
+                                        type="text" placeholder="First Name">
+                                </div>
                             </div>
-                            <div class="field four wide">
-                                <label>Last name</label>
-                                <input id="contactModalLastname"
-                                    type="text" placeholder="Last Name">
+                            <div class="column">
+                                <div class="ui labeled input">
+                                    <div class="ui label" style="background:#d7f5f0">
+                                        Last name
+                                    </div>
+                                    <input id="contactModalLastname"
+                                        type="text" placeholder="Last Name">
+                                </div>
                             </div>
-                            <div class="field seven wide">
-                                <label>Ring ID</label>
-                                <input id="contactModalRingId"
-                                    type="text" placeholder="Ring ID">
+                        </div>
+                        <div class="row">
+                            <div class="column">
+                                <div class="ui fluid action labeled input">
+                                    <div class="ui label" style="background:#d7f5f0">
+                                        Ring ID
+                                    </div>
+                                    <input id="contactModalRingId"
+                                        type="text" placeholder="Ring ID">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="column">
+                                <div class="ui fluid action blue label">
+                                        @TODO Image Upload
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -91,12 +114,14 @@
                 </p>
             </div>
             <div class="actions">
-                <div class="ui black deny button">
-                    <p id="contactModalDeny">
+                <div id="contactModalDeny" class="ui black deny button">
+                    <p>
                         <!-- Filled dynamically -->
                     </p>
                 </div>
-                <div id="createContact" class="ui positive right labeled icon button">
+                <div id="createContact"
+                    class="ui positive right labeled icon button"
+                    style="background:#00B5AD">
                     Submit
                     <i class="checkmark icon"></i>
                 </div>

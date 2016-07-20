@@ -177,7 +177,20 @@ html, body
                     font-weight: normal;
                 }
 
-                #contacts .ellipsis
+                #contacts .notifications
+                {
+                    float: right;
+                    margin: 0 .5em 0 0;
+                    line-height: 2.5em;
+                    opacity: 0.8;
+                    color: #db2828;
+                    /*text-shadow: 0 0 15px #db2828;*/
+                    font-size: 0.8em;
+                    font-style: normal;
+                    font-weight: normal;
+                }
+
+                #contacts .options
                 {
                     float: right;
                     margin: 0.2em 0 0 .5em;

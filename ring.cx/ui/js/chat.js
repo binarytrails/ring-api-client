@@ -35,13 +35,6 @@ initChatHistory();
 
 // Global functions
 
-function initChatHistory()
-{
-    loadContactChatHistory();
-    $('#chatReply input').focus();
-    scrolldownChatHistory();
-}
-
 function talkToContact(ringId)
 {
     // set current background to default
@@ -62,6 +55,16 @@ function talkToContact(ringId)
     }
 
     initChatHistory()
+}
+
+// Chat
+
+function initChatHistory()
+{
+    loadContactChatHistory();
+    $('#' + currentContactId + ' .notifications').html('');
+    $('#chatReply input').focus();
+    scrolldownChatHistory();
 }
 
 function addChatHistoryItem(item, side, hideImage=false)
@@ -97,6 +100,30 @@ function loadContactChatHistory()
 
         addChatHistoryItem(item, side, false);
     }
+}
+
+// Contact
+
+function incrementNotification(contactId)
+{
+    if (contactId == currentContactId)
+    {
+        return;
+    }
+
+    var value = $('#' + contactId + ' .notifications').html();
+
+    if (!value)
+    {
+        value = 1;
+    }
+    else
+    {
+        value = parseInt(value);
+        value += 1;
+    }
+
+    $('#' + contactId + ' .notifications').html(value);
 }
 
 // User Events listeners
@@ -332,6 +359,7 @@ ringApiWs.onmessage = function(event)
 
         var contact = ringLocalStorage.accountContact(currentAccountId, ringId);
 
+        // in contacts
         if (contact)
         {
             var textPlain = content['text/plain']; // TODO change: see top list
@@ -340,10 +368,18 @@ ringApiWs.onmessage = function(event)
             ringLocalStorage.addAccountContactHistory(
                 currentAccountId, ringId, messageStatus, textPlain);
 
-            // add to html
-            var chatHistoryItem = htmlBuilder.chatHistoryItem(
-                textPlain, 'left');
-            htmlChatHistory.appendChild(chatHistoryItem);
+            if (ringId == currentContactId)
+            {
+                // add to html
+                var chatHistoryItem = htmlBuilder.chatHistoryItem(
+                    textPlain, 'left');
+                htmlChatHistory.appendChild(chatHistoryItem);
+                initChatHistory();
+            }
+            else
+            {
+                incrementNotification(ringId);
+            }
         }
     }
 };

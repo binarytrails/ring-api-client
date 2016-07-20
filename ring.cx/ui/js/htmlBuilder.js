@@ -31,12 +31,14 @@ htmlBuilder.contact = function(id, firstLastNames, imageSrc=null)
     var contacts = document.createElement('div'),
         image = null;
         text = document.createElement('i');
+        notifications = document.createElement('i');
         options = document.createElement('i');
 
     contacts.id = id;
 
     contacts.className = 'ui label contact';
     text.className = 'text';
+    notifications.className = 'notifications';
     options.className = 'large ellipsis vertical icon options';
 
     if (imageSrc)
@@ -55,6 +57,7 @@ htmlBuilder.contact = function(id, firstLastNames, imageSrc=null)
     contacts.appendChild(image);
     contacts.appendChild(text);
     contacts.appendChild(options);
+    contacts.appendChild(notifications);
 
     return contacts;
 }

@@ -29,20 +29,26 @@ htmlBuilder.chatHistoryItem = function(text, cssFloat, hideImage=false)
 htmlBuilder.contact = function(id, firstLastNames, imageSrc=null)
 {
     var contacts = document.createElement('div'),
-        image = document.createElement('img'),
+        image = null;
         text = document.createElement('i');
         options = document.createElement('i');
 
     contacts.id = id;
 
     contacts.className = 'ui label contact';
-    image.className = 'ui right spaced avatar image';
     text.className = 'text';
     options.className = 'large ellipsis vertical icon options';
 
-    if (!imageSrc)
+    if (imageSrc)
     {
-        image.src = 'images/avatar/large/white-image.png';
+        image = document.createElement('img');
+        image.className = 'ui right spaced avatar image';
+        image.src = imageSrc;
+    }
+    else
+    {
+        image = document.createElement('i');
+        image.className = 'big user icon';
     }
     text.innerHTML = firstLastNames;
 

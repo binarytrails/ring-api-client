@@ -1,6 +1,8 @@
 
 /* TODO:
- *  store / load mime_type in chat history
+ *  chat history:
+ *      store message_id
+ *      store / load mime_type
  *  add profile image
  *  chatHistory: hide same user image if the last history item is his
  */
@@ -22,8 +24,7 @@ var htmlChatHistory = document.getElementById('chatHistory'),
 
 // TODO load from cookies after account wizard is coded
 
-var ringApiHttp = 'http:/127.0.0.1:8080/',
-    ringApiWs = new WebSocket("ws://127.0.0.1:5678/"),
+var ringAPI = new RingAPI('127.0.0.1', '8080', '5678'),
     currentAccountId  = '2dcb4c8fd4cee100',
     currentContactId = null;
 
@@ -134,41 +135,23 @@ $('#chatReply').keypress(function(e)
 {
     if (e.keyCode == 13) // Enter
     {
-        var message = '<p>' + $('#chatReply input').val() + '</p>',
+        var message = $('#chatReply input').val(),
             messageStatus = 'sent';
 
-        /*
-        $.ajax({
-            type: 'POST',
-            url: ringApiHttp + 'account/' + currentAccountId + '/message/',
-            data: {
-                ring_id: currentContactId,
-                mime_type: 'text/plain',
-                message: message
-            },
-            sucess: function(data)
+        ringAPI.sendAccountMessage(
+             currentAccountId, currentContactId,
+            'text/plain', message,
+            function(data)
             {
-                console.log(data);
-                return;
+                var message_id = data['message_id'];
+
+                // save to storage
                 ringLocalStorage.addAccountContactHistory(currentAccountId,
                     currentContactId, messageStatus, message);
 
-                var chatHistoryItem = htmlBuilder.chatHistoryItem(message, 'right');
-                htmlChatHistory.appendChild(chatHistoryItem);
-
+                initChatHistory();
             }
-        });
-        */
-        // save to storage
-        ringLocalStorage.addAccountContactHistory(currentAccountId,
-            currentContactId, messageStatus, message);
-
-        // add to html
-        var chatHistoryItem = htmlBuilder.chatHistoryItem(message, 'right');
-        htmlChatHistory.appendChild(chatHistoryItem);
-
-        // reset input
-        $('#chatReply input').val('');
+        );
     }
 });
 
@@ -331,22 +314,19 @@ $('#contactModalErrorClose').click(function(){
     $('#contactModalError').hide();
 });
 
-/* // FIXME
-$('#contactModal').keypress(function(e)
-{
-    if (e.keyCode == 13) // Enter
-    {
-        if(addContact())
-        {
-            $('#contactModal').modal('hide');
-        }
-    }
-});
-*/
-
 // Websockets callbacks
 
-ringApiWs.onmessage = function(event)
+ringAPI.websocket.onopen = function(event)
+{
+    console.log('Ring API websocket opened');
+};
+
+ringAPI.websocket.onclose = function(event)
+{
+    console.log('Ring API websocket closed');
+};
+
+ringAPI.websocket.onmessage = function(event)
 {
     var data = JSON.parse(event.data);
 
@@ -384,16 +364,6 @@ ringApiWs.onmessage = function(event)
     }
 };
 
-ringApiWs.onopen = function(event)
-{
-    console.log('Ring API websocket opened');
-};
-
-ringApiWs.onclose = function(event)
-{
-    console.log('Ring API websocket closed');
-};
-
 // Initializing
 
 function initContacts()
@@ -409,6 +379,7 @@ function initContacts()
             {
                 htmlContact = htmlBuilder.contact(ringId,
                     profile.name + ' ' + profile.lastname);
+                    //'images/avatar/large/white-image.png'); // custom default
                 htmlContact.addEventListener('click', selectContact, false);
 
                 contactsItemOptions = htmlContact.childNodes[2];

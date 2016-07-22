@@ -63,15 +63,16 @@ function talkToContact(ringId)
 function initChatHistory()
 {
     loadContactChatHistory();
-    $('#' + currentContactId + ' .notifications').html('');
+    clearNotifications();
     $('#chatReply input').focus();
     scrolldownChatHistory();
 }
 
-function addChatHistoryItem(item, side, hideImage=false)
+function addChatHistoryItem(mimeType, message, side, hideImage=false)
 {
     var chatHistoryItem = htmlBuilder.chatHistoryItem(
-        item.message, side, hideImage);
+        message, side, hideImage);
+
     htmlChatHistory.appendChild(chatHistoryItem);
 }
 
@@ -99,7 +100,7 @@ function loadContactChatHistory()
             side = 'right';
         }
 
-        addChatHistoryItem(item, side, false);
+        addChatHistoryItem('text/plain', item.message, side, false);
     }
 }
 
@@ -125,6 +126,13 @@ function incrementNotification(contactId)
     }
 
     $('#' + contactId + ' .notifications').html(value);
+    $('#' + contactId + ' .notifications').css('display', '');
+}
+
+function clearNotifications()
+{
+    $('#' + currentContactId + ' .notifications').html('');
+    $('#' + currentContactId + ' .notifications').css({'display': 'none'});
 }
 
 // User Events listeners
@@ -149,7 +157,9 @@ $('#chatReply').keypress(function(e)
                 ringLocalStorage.addAccountContactHistory(currentAccountId,
                     currentContactId, messageStatus, message);
 
-                initChatHistory();
+                addChatHistoryItem('text/plain', message, 'right', false);
+                $('#chatReply input').focus();
+                scrolldownChatHistory();
             }
         );
     }
@@ -350,11 +360,9 @@ ringAPI.websocket.onmessage = function(event)
 
             if (ringId == currentContactId)
             {
-                // add to html
-                var chatHistoryItem = htmlBuilder.chatHistoryItem(
-                    textPlain, 'left');
-                htmlChatHistory.appendChild(chatHistoryItem);
-                initChatHistory();
+                addChatHistoryItem('text/plain', textPlain, 'left', false);
+                $('#chatReply input').focus();
+                scrolldownChatHistory();
             }
             else
             {

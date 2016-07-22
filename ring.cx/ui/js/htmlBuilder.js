@@ -31,14 +31,14 @@ htmlBuilder.contact = function(id, firstLastNames, imageSrc=null)
     var contacts = document.createElement('div'),
         image = null;
         text = document.createElement('i');
-        notifications = document.createElement('i');
+        notifications = document.createElement('div');
         options = document.createElement('i');
 
     contacts.id = id;
 
     contacts.className = 'ui label contact';
     text.className = 'text';
-    notifications.className = 'notifications';
+    notifications.className = 'ui teal label notifications';
     options.className = 'large ellipsis vertical icon options';
 
     if (imageSrc)
@@ -53,6 +53,7 @@ htmlBuilder.contact = function(id, firstLastNames, imageSrc=null)
         image.className = 'big user icon';
     }
     text.innerHTML = firstLastNames;
+    notifications.style.display = 'none';
 
     contacts.appendChild(image);
     contacts.appendChild(text);

@@ -1,22 +1,33 @@
-# Ring-webext
+# Ring API client
 
-It's using the [Ring API](https://github.com/sevaivanov/ring-api).
-
-> WebExtensions are a new way to write browser extensions. The technology is designed for cross-browser compatibility: to a large extent the API is compatible with the extension API supported by Google Chrome and Opera. Extensions written for these browsers will in most cases run in Firefox with just a few changes. The API is also fully compatible with multiprocess Firefox. -- [Mozilla](https://developer.mozilla.org/en-US/Add-ons/WebExtensions)
+The interactions with the Ring-daemon are passing through the [Ring API](https://github.com/sevaivanov/ring-api).
 
 ## Roadmap
 
 * ~~Write a skeleton~~
 * ~~Design a responsive user interface~~
-* Implement the UI
-* Add UI media queries to ensure responsiveness
-* Adapt it for all browsers
+
+* Implement the features
+
+    * Pure Web Extension *ring-webext/*
+
+        * ~~Handle contacts~~
+        * ~~Search contacts~~
+        * ~~Text chat~~
+        * Video chat
+        * Settings
+
+    * Node.js *nodejs/*
+
+        * WebExtension -> Server redirection
+        * Handle contacts with database
+        * ~~Search contacts~~
+        * ~~Text chat~~
+        * Video chat
+        * Settings
+
+* Write a wiki
 * Write tests
-* Implement features
-    * Search contacts
-    * Chat windows
-    * Settings
-    * Video
 
 ## License
 

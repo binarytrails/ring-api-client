@@ -8,7 +8,6 @@
  */
 
 /* FIXME:
- * ensure saving chat history if sent / received quickly
  * enter key to create / update contact
  * search not working without refresh on update / create contact
  */

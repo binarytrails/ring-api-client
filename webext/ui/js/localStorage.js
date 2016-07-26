@@ -107,13 +107,14 @@ ringLocalStorage.addAccountContactHistory = function(
 
     if (!history)
     {
-        history = {}
+        history = []
     }
 
-    history[Date()] = {
+    history.push({
+        datetime: Date(),
         message: message,
         messageStatus: messageStatus
-    }
+    });
 
     data[accountId]['contacts'][contactId]['history'] = history;
 

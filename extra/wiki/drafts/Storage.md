@@ -26,7 +26,7 @@ This data persists after closing a browser.
 
     /* Layout
      *
-     * ring.cx-<account_id>-<type>
+     * ring.cx-<account_id>
      *   |
      *   +---contacts
      *           |
@@ -47,9 +47,11 @@ This data persists after closing a browser.
      *                                  +---mime_type
      */
 
-Local Storage is based on *(key, value)* pair where the value is a JSON string. Therefore, it is better to avoid having nested *ring.cx -- account_id -- type -- ...* because for a simple write operation to a chat history you will have to load (parse) the whole JSON string and then overwrite it to save it. This may cause an increase in latency on operations and potentially corrupt other user accounts due to programming errors. The type is explicitly appened to *ring.cx-account_id* to make a clear segmentation since IP2IP is not handled the same way as using Ring over OpenDHT (i.e. accounts details and its contacts IDs will differ as well as their implementation).
+TODO:
+* accounts types (native SIP IP2IP and SIP with Ring encrypting over OpenDHT)
+* profile image
 
-**An odd situation** happened in the chat window when the user writes and send messages very quickly. They are sent but not saved in the localStorage. Turns out this is normal with the current native localStorage implementation. The latter makes it more suitable to use a wrapper around it called chrome storage.
+Local Storage is based on *(key, value)* pair where the value is a JSON string. Therefore, it is better to avoid having nested *ring.cx -- account_id -- type -- ...* because for a simple write operation to a chat history you will have to load (parse) the whole JSON string and then overwrite it to save it. This may cause an increase in latency on operations and potentially corrupt other user accounts due to programming errors.
 
 ## Chrome Storage
 
@@ -59,7 +61,22 @@ This API has been optimized to meet the specific storage needs of extensions. It
 
 * User data can be stored as objects (the localStorage API stores data in strings).
 
-**Another odd situation** happened when the chrome storage generated Dead Objects if the modal window was closed before the asynchronous operation was completed.
+### Cons
 
-I'm currenly solving it.
+1. Dead Objects with modal windows
+
+    It happened when the chrome storage generated Dead Objects if the modal window was closed before the asynchronous operation was completed.
+
+2. Incompatible with native LocalStorage
+
+        localStorage.setItem('a', 'b');
+        localStorage.getItem('a');
+        //"b"
+
+        chrome.storage.local.get('a', function(item){console.log(item)})
+        //Object {}
+
+        chrome.storage.local.set('a', 'b')
+        chrome.storage.local.get('a', function(item){console.log(item)})
+        //Object {a: "b"}
 

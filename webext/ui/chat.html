@@ -25,11 +25,16 @@
         <script src="js/chat.js" async></script>
     </head>
     <body>
-        <div class="ui bottom attached segment pushable">
+        <div class="pusher">
             <div class="ui visible inverted top sidebar menu">
                 <a class="item">
-                    <i class="users icon"></i>
+                    <i class="block layout icon"></i>
                     Accounts
+                </a>
+                <a id="showContacts" class="item">
+                    <i class="users icon"
+                        style="float:left; margin-right:1em;"></i>
+                    Contacts
                 </a>
                 <a class="item" href="chat.html">
                     <i class="comment icon"></i>
@@ -48,108 +53,110 @@
                     About
                 </a>
             </div>
-            <div class="pusher">
-                <div id="container" class="ui basic segment">
-                    <div id="left">
-                        <div id="chatHistory" class="windows">
+            <div id="container" class="ui basic segment">
+                <div class="ui sixteen column centered internally celled grid"
+                style="height:100%;margin:inherit;">
+                    <div class="one column centered row">
+                        <div class="column" style="height:89%">
+                            <div id="chatHistory" class="windows"></div>
                         </div>
-                        <div id="chatReply" class="ui icon input windows">
-                            <input type="text" placeholder="Reply...">
-                            <i class="send icon"></i>
-                        </div>
-                    </div>
-                    <div id="right">
-                        <div id="searchContacts" class="ui search">
-                            <div class="ui icon input windows">
-                                <input class="prompt" type="text"
-                                    placeholder="Search contacts...">
-                                <i class="search icon"></i>
-                            </div>
-                            <div class="results"></div>
-                        </div>
-                        <div id="contacts" class="windows">
-                            <div id="addContact">
-                                <i class="plus icon"></i>
+                        <div class="column" style="padding-top:0;">
+                            <div id="chatReply" class="ui icon input windows">
+                                <input type="text" placeholder="Reply...">
+                                <i class="send icon"></i>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div id="contactModal" class="ui modal" >
-                    <i class="close icon"></i>
-                    <div id="contactModalHeader" class="header"
-                        style="background:#d7f5f0;">
+            </div>
+        </div>
+        <div id="sidebarContacts"
+            class="ui sidebar inverted right vertical menu">
+            <a class="item">
+                <div id="searchContacts" class="ui search">
+                    <div class="ui icon input windows-dark">
+                        <input class="prompt" type="text"
+                            placeholder="Search contacts...">
+                        <i class="search icon"></i>
                     </div>
-                    <div class="image content">
-                        <div class="ui medium image">
-                            <img src="images/avatar/large/white-image.png">
+                    <div class="results"></div>
+                </div>
+            </a>
+            <a class="item" style="height:90%;">
+                <div id="contacts" class="windows-dark">
+                    <div id="addContact">
+                        <i class="plus icon"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div id="contactModal" class="ui modal" >
+            <i class="close icon"></i>
+            <div id="contactModalHeader" class="header"
+                style="background:#d7f5f0;">
+            </div>
+            <div class="image content">
+                <div class="ui medium image">
+                    <img src="images/avatar/large/white-image.png">
+                </div>
+                <div class="description" style="width:100%;">
+                    <div class="ui equal width padded grid"
+                        style="height:100%; width:98%;">
+                        <div class="row">
+                            <div class="column">
+                                <div class="ui labeled input">
+                                    <div class="ui label"
+                                        style="background:#d7f5f0">
+                                        Name
+                                    </div>
+                                    <input id="contactModalName"
+                                        type="text" placeholder="First Name">
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="ui labeled input">
+                                    <div class="ui label"
+                                        style="background:#d7f5f0">
+                                        Last name
+                                    </div>
+                                    <input id="contactModalLastname"
+                                        type="text" placeholder="Last Name">
+                                </div>
+                            </div>
                         </div>
-                        <div class="description" style="width:100%;">
-                            <div class="ui equal width padded grid"
-                                style="height:100%;width:100%;">
-                                <div class="row">
-                                    <div class="column">
-                                        <div class="ui labeled input">
-                                            <div class="ui label"
-                                                style="background:#d7f5f0">
-                                                Name
-                                            </div>
-                                            <input id="contactModalName"
-                                                type="text" placeholder="First Name">
-                                        </div>
+                        <div class="row">
+                            <div class="column">
+                                <div class="ui fluid action labeled input">
+                                    <div class="ui label"
+                                        style="background:#d7f5f0">
+                                        Ring ID
                                     </div>
-                                    <div class="column">
-                                        <div class="ui labeled input">
-                                            <div class="ui label"
-                                                style="background:#d7f5f0">
-                                                Last name
-                                            </div>
-                                            <input id="contactModalLastname"
-                                                type="text" placeholder="Last Name">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="column">
-                                        <div class="ui fluid action labeled input">
-                                            <div class="ui label"
-                                                style="background:#d7f5f0">
-                                                Ring ID
-                                            </div>
-                                            <input id="contactModalRingId"
-                                                type="text" placeholder="Ring ID">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="column">
-                                        <div class="ui fluid action blue label">
-                                                @TODO Image Upload
-                                        </div>
-                                    </div>
+                                    <input id="contactModalRingId"
+                                        type="text" placeholder="Ring ID">
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div id="contactModalError" class="ui negative message"
-                            style="display:none; width:98%; margin-left:1%;">
-                        <i id="contactModalErrorClose" class="close icon"></i>
-                        <div id="contactModalErrorHeader" class="header">
-                        </div>
-                        <p id="contactModalErrorMessage">
-                        </p>
-                    </div>
-                    <div class="actions">
-                        <div id="contactModalDeny" class="ui black deny button">
-                            <p>
-                            </p>
-                        </div>
-                        <div id="createContact"
-                            class="ui positive right labeled icon button"
-                            style="background:#00B5AD">
-                            Submit
-                            <i class="checkmark icon"></i>
-                        </div>
-                    </div>
+                </div>
+            </div>
+            <div id="contactModalError" class="ui negative message"
+                    style="display:none; width:98%; margin-left:1%;">
+                <i id="contactModalErrorClose" class="close icon"></i>
+                <div id="contactModalErrorHeader" class="header">
+                </div>
+                <p id="contactModalErrorMessage">
+                </p>
+            </div>
+            <div class="actions">
+                <div id="contactModalDeny" class="ui black deny button">
+                    <p>
+                    </p>
+                </div>
+                <div id="createContact"
+                    class="ui positive right labeled icon button"
+                    style="background:#00B5AD">
+                    Submit
+                    <i class="checkmark icon"></i>
                 </div>
             </div>
         </div>

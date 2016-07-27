@@ -15,7 +15,7 @@ html, body
 
         .windows
         {
-            background: #e8fffb;
+            background: #d4fbf5;
             border-radius: 5px 5px 5px 5px;
             -moz-border-radius: 5px 5px 5px 5px;
             -webkit-border-radius: 5px 5px 5px 5px;
@@ -29,29 +29,10 @@ html, body
             height: 100%;
         }
 
-        #container #top
-        {
-            height: 5%;
-            background: #a7d1c9;
-        }
-
-        #container #left, #container #right
-        {
-            height: 90%;
-            margin: 1% 0 1% 0;
-        }
-
             #chatHistory, #contacts
             {
-                height: 94%;
+                height: 100%;
             }
-
-        #container #left
-        {
-            width: 66.5%;
-            float: left;
-            margin-left: 1%;
-        }
 
             #chatHistory
             {
@@ -82,7 +63,6 @@ html, body
                         border-radius: 50%;
                         -moz-border-radius: 50%;
                         -webkit-border-radius: 50%;
-                        /*background: #d7f5f0;*/
                     }
 
                         /* Placeholder FontAwesome icon */
@@ -105,8 +85,8 @@ html, body
                         border-radius: 10px 10px 10px 10px;
                         -moz-border-radius: 10px 10px 10px 10px;
                         -webkit-border-radius: 10px 10px 10px 10px;
-                        background: #d7f5f0;
-                        /*border: 0.5px solid #d4d4d4;*/
+                        background: #bcfff4;
+                        border: 0.5px solid #d4d4d4;
                     }
 
                         .chatHistoryItemText > p
@@ -117,7 +97,6 @@ html, body
             #chatReply
             {
                 width: 100%;
-                margin-top: 1%;
             }
 
                 #chatReply input
@@ -126,12 +105,11 @@ html, body
                     background: none;
                 }
 
-        #container #right
+        #sidebarContacts .item:hover
         {
-            width: 30%;
-            float: right;
-            margin-right: 1%;
+            background: none;
         }
+
 
             #searchContacts
             {
@@ -147,7 +125,8 @@ html, body
                 #searchContacts input
                 {
                     border: none;
-                    background: none;
+                    color: white;
+                    background: #292a27;
                 }
 
             #contacts
@@ -166,10 +145,15 @@ html, body
                     -moz-border-radius: 2px 2px 2px 2px;
                     -webkit-border-radius: 2px 2px 2px 2px;
 
-                    background: #d7f5f0;
                     cursor: pointer;
                     font-size: 1.2em;
+                    opacity: 0.8;
+                    background: #b5fff2;
                 }
+                    #contacts .label:hover
+                    {
+                        opacity: 1;
+                    }
 
                 #contacts .text
                 {
@@ -198,11 +182,12 @@ html, body
                     height: 3em;
                     text-align: center;
                     margin: 1%;
-                    background: #d7f5f0;
+                    opacity: 0.8;
+                    background: #424540;
                 }
                     #contacts #addContact:hover
                     {
-                        background: #cbf2eb;
+                        opacity: 1;
                     }
 
                     #contacts #addContact > i

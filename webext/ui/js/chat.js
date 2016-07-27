@@ -41,7 +41,7 @@ function talkToContact(ringId)
     var htmlContact = document.getElementById(currentContactId);
     if (htmlContact)
     {
-        htmlContact.style.background = '#d7f5f0';
+        htmlContact.style.opacity = 0.8;
     }
 
     // set new interlocutor as current
@@ -51,7 +51,7 @@ function talkToContact(ringId)
     // set new interlocutor background to focused
     if (htmlContact)
     {
-        htmlContact.style.background = '#cbf2eb';
+        htmlContact.style.opacity = 1;
     }
 
     initChatHistory()
@@ -165,6 +165,13 @@ $('#chatReply').keypress(function(e)
 });
 
 // Contacts
+
+$('#showContacts').click(function()
+{
+    $('#sidebarContacts')
+        .sidebar('toggle');
+        //.sidebar('setting', 'transition', 'overlay')
+});
 
 $('.ui.search')
     .search({

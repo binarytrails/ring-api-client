@@ -31,11 +31,6 @@
                     <i class="block layout icon"></i>
                     Accounts
                 </a>
-                <a id="showContacts" class="item">
-                    <i class="users icon"
-                        style="float:left; margin-right:1em;"></i>
-                    Contacts
-                </a>
                 <a class="item" href="chat.html">
                     <i class="comment icon"></i>
                     Chat
@@ -52,15 +47,19 @@
                     <i class="info icon"></i>
                     About
                 </a>
+                <a id="showContacts" class="right item">
+                    <i class="users icon"></i>
+                    Contacts
+                    <div id="contactsNotifications"
+                        class="ui right pointing teal label notifications">0</div>
+                </a>
             </div>
             <div id="container" class="ui basic segment">
                 <div class="ui sixteen column centered internally celled grid"
                 style="height:100%;margin:inherit;">
                     <div class="one column centered row">
                         <div class="column" style="height:89%">
-                            <div id="chatHistoryBg"></div>
-                            <div id="chatHistory" class="windows">
-                            </div>
+                            <div id="chatHistory" class="windows"></div>
                         </div>
                         <div class="column" style="padding-top:0;">
                             <div id="chatReply" class="ui icon input windows">

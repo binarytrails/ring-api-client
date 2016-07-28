@@ -70,6 +70,31 @@ ringLocalStorage.deleteAccountContact = function(accountId, contactId)
     return true;
 }
 
+// Notifications
+
+ringLocalStorage.incrementContactsNotifications = function()
+{
+    var total = parseInt(localStorage.getItem('contactsNotifications'));
+    localStorage.setItem('contactsNotifications', total += 1);
+}
+
+ringLocalStorage.contactsNotifications = function()
+{
+    return localStorage.getItem('contactsNotifications');
+}
+
+ringLocalStorage.substractContactsNotifications = function(value)
+{
+    var total = localStorage.getItem('contactsNotifications');
+    localStorage.setItem('contactsNotifications', total - value);
+    return total - value;
+}
+
+ringLocalStorage.clearContactsNotifications = function()
+{
+    localStorage.setItem('contactsNotifications', 0);
+}
+
 // Chat History
 
 ringLocalStorage.accountContactHistory = function(accountId, contactId)

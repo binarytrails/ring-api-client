@@ -62,7 +62,7 @@ function talkToContact(ringId)
 function initChatHistory()
 {
     loadContactChatHistory();
-    clearNotifications();
+    clearNotifications(currentContactId);
     $('#chatReply input').focus();
     scrolldownChatHistory();
 }
@@ -124,14 +124,25 @@ function incrementNotification(contactId)
         value += 1;
     }
 
+    // global contacts counter
+    ringLocalStorage.incrementContactsNotifications();
+    $('#contactsNotifications').html(ringLocalStorage.contactsNotifications());
+
+    // this contact
     $('#' + contactId + ' .notifications').html(value);
     $('#' + contactId + ' .notifications').css('display', '');
 }
 
-function clearNotifications()
+function clearNotifications(contactId)
 {
-    $('#' + currentContactId + ' .notifications').html('');
-    $('#' + currentContactId + ' .notifications').css({'display': 'none'});
+    // global contacts counter
+    var counter = $('#' + contactId + ' .notifications').html();
+        newTotal = ringLocalStorage.substractContactsNotifications(counter);
+    $('#contactsNotifications').html(newTotal);
+
+    // this contact
+    $('#' + contactId + ' .notifications').html('');
+    $('#' + contactId + ' .notifications').css({'display': 'none'});
 }
 
 // User Events listeners
@@ -157,6 +168,7 @@ $('#chatReply').keypress(function(e)
                     currentContactId, messageStatus, message);
 
                 addChatHistoryItem('text/plain', message, 'right', false);
+                $('#chatReply input').val('');
                 $('#chatReply input').focus();
                 scrolldownChatHistory();
             }
@@ -392,8 +404,8 @@ function initContacts()
             if (profile)
             {
                 htmlContact = htmlBuilder.contact(ringId,
-                    profile.name + ' ' + profile.lastname,
-                    'images/avatar/large/white-image.png'); // custom default
+                    profile.name + ' ' + profile.lastname);
+                    //'images/avatar/large/white-image.png'); // custom default
                 htmlContact.addEventListener('click', selectContact, false);
 
                 contactsItemOptions = htmlContact.childNodes[2];
@@ -406,6 +418,7 @@ function initContacts()
         // set first contact as 'talk to'
         talkToContact(Object.keys(accountContacts)[0]);
     }
+    ringLocalStorage.clearContactsNotifications();
 }
 
 // TODO move to account wizard creation

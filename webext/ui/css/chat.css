@@ -15,7 +15,8 @@ html, body
 
         .windows
         {
-            background: #d4fbf5;
+            /background: #d4fbf5;
+            background: #F9F8F6;
             border-radius: 5px 5px 5px 5px;
             -moz-border-radius: 5px 5px 5px 5px;
             -webkit-border-radius: 5px 5px 5px 5px;
@@ -39,6 +40,15 @@ html, body
                 width: 100%;
                 overflow-y: auto;
             }
+                #chatHistoryBg
+                {
+                    position: absolute;
+                    width: 98%;
+                    height: 98%;
+                    background: url('../../resources/icons/ring.svg') no-repeat center;
+                    opacity: 0.4;
+                    //background: red;
+                }
 
                 .chatHistoryItem
                 {
@@ -82,11 +92,11 @@ html, body
                         height 98%;
                         margin: 1%;
                         padding: 1% 2%;
-                        border-radius: 10px 10px 10px 10px;
-                        -moz-border-radius: 10px 10px 10px 10px;
-                        -webkit-border-radius: 10px 10px 10px 10px;
-                        background: #bcfff4;
                         border: 0.5px solid #d4d4d4;
+                        border-radius: 2px 2px 2px 2px;
+                        -moz-border-radius: 2px 2px 2px 2px;
+                        -webkit-border-radius: 2px 2px 2px 2px;
+                        background: #AAEBEB;
                     }
 
                         .chatHistoryItemText > p
@@ -105,28 +115,39 @@ html, body
                     background: none;
                 }
 
-        #sidebarContacts .item:hover
+        #sidebarContacts
         {
-            background: none;
+            /background: #f8f8f0;
         }
-
+            #sidebarContacts .item:hover
+            {
+                background: none;
+            }
 
             #searchContacts
             {
                 width: 100%;
                 margin-bottom: 1.5%;
             }
+                #searchContacts .results
+                {
+                    background: #E8E8E8;
+                }
 
                 #searchContacts .ui.icon.input
                 {
                     width: 100%;
+                    background: #E8E8E8;
+                    border: 1.5px solid white;
+                    border-radius: 2px 2px 2px 2px;
+                    -moz-border-radius: 2px 2px 2px 2px;
+                    -webkit-border-radius: 2px 2px 2px 2px;
                 }
 
                 #searchContacts input
                 {
                     border: none;
-                    color: white;
-                    background: #292a27;
+                    background: none;
                 }
 
             #contacts
@@ -141,6 +162,7 @@ html, body
                     width: 98%;
                     margin: 1%;
                     margin-bottom: 0;
+                    border: 1.5px solid white;
                     border-radius: 2px 2px 2px 2px;
                     -moz-border-radius: 2px 2px 2px 2px;
                     -webkit-border-radius: 2px 2px 2px 2px;
@@ -148,7 +170,7 @@ html, body
                     cursor: pointer;
                     font-size: 1.2em;
                     opacity: 0.8;
-                    background: #b5fff2;
+                    background: #E8E8E8;
                 }
                     #contacts .label:hover
                     {
@@ -183,7 +205,12 @@ html, body
                     text-align: center;
                     margin: 1%;
                     opacity: 0.8;
-                    background: #424540;
+                    color: black;
+                    background: #E8E8E8;
+                    border: 1.5px solid white;
+                    border-radius: 2px 2px 2px 2px;
+                    -moz-border-radius: 2px 2px 2px 2px;
+                    -webkit-border-radius: 2px 2px 2px 2px;
                 }
                     #contacts #addContact:hover
                     {

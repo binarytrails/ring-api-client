@@ -392,8 +392,8 @@ function initContacts()
             if (profile)
             {
                 htmlContact = htmlBuilder.contact(ringId,
-                    profile.name + ' ' + profile.lastname);
-                    //'images/avatar/large/white-image.png'); // custom default
+                    profile.name + ' ' + profile.lastname,
+                    'images/avatar/large/white-image.png'); // custom default
                 htmlContact.addEventListener('click', selectContact, false);
 
                 contactsItemOptions = htmlContact.childNodes[2];

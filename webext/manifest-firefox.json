@@ -1,11 +1,11 @@
 {
     "name": "Ring.cx",
-    "description": "",
+    "description": "Ring API Client",
     "version": "1.0",
     "manifest_version": 2,
-    "homepage_url": "https://github.com/sevaivanov/ring-webextension",
+    "homepage_url": "https://github.com/sevaivanov/ring-api-client",
     "icons": {
-        "48": "resources/icons/ring.png"
+        "48": "ui/icons/ring.png"
     },
 
     "applications": {
@@ -20,7 +20,7 @@
     },
 
     "browser_action": {
-        "default_icon": "resources/icons/ring.png",
+        "default_icon": "ui/icons/ring.png",
         "default_title": "Ring.cx"
     }
 }

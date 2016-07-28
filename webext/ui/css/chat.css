@@ -39,7 +39,8 @@ html, body
             {
                 width: 100%;
                 overflow-y: auto;
-                background: url('../../resources/icons/ring-0.4.svg') no-repeat center;
+                background: url('../icons/ring-0.4.svg') no-repeat center;
+                background-size: 15%;
             }
                 .chatHistoryItem
                 {

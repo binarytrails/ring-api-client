@@ -418,8 +418,10 @@ function initContacts()
         // set first contact as 'talk to'
         talkToContact(Object.keys(accountContacts)[0]);
     }
-    ringLocalStorage.clearContactsNotifications();
 }
+
+ringLocalStorage.clearContactsNotifications();
+$('#contactsNotifications').html('0');
 
 // TODO move to account wizard creation
 function initLocalStorage()

@@ -1,2 +1,12 @@
+*~
 *.swp
 *.swo
+
+manifest.json
+node_modules/
+semantic/
+scratch/
+libs/
+
+*-old*
+todo/

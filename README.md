@@ -1,6 +1,8 @@
 # Ring API client
 
-The interactions with the Ring-daemon are passing through the [Ring API](https://github.com/sevaivanov/ring-api).
+This web-client is using the [Ring project](https://ring.cx).
+
+The interactions with the Ring-daemon are passing through the [Ring API](https://github.com/sevaivanov/ring-api) which exposes its core funcionalities.
 
 ## Roadmap
 
@@ -11,23 +13,29 @@ The interactions with the Ring-daemon are passing through the [Ring API](https:/
 
     * Pure Web Extension *ring-webext/*
 
-        * ~~Handle contacts~~
-        * ~~Search contacts~~
-        * ~~Text chat~~
-        * Video chat
-        * Settings
+        * Pages
+            * ~~Chat~~
+                * ~~Handle contacts~~
+                * ~~Search contacts~~
+            * Accounts
+            * Settings
+            * Contacts
+            * Video
 
     * Node.js *nodejs/*
 
-        * WebExtension -> Server redirection
-        * Handle contacts with database
-        * ~~Search contacts~~
-        * ~~Text chat~~
-        * Video chat
-        * Settings
+        * ~~Write a server~~
+        * Custom WebExtension with custom redirection to this Server
+
+        * Optional: Handle contacts with database
 
 * Write a wiki
-* Write tests
+
+    * Introduction
+    * Design
+    * ~~Storage~~
+
+* ~~Write unit tests~~
 
 ## License
 

@@ -9,6 +9,11 @@ It depends on JQuery & Semantics UI. We build it with everything from Semantics 
     $ cd ui/libs/
     $ npm install
 
+    Starting 'run setup'...
+    ? It looks like you have a semantic.json file already. (Use arrow keys)
+    ❯ Yes, extend my current settings.
+      Skip install
+
     ? Set-up Semantic UI
     ❯ Automatic (Use defaults locations and all components)
     ? Set-up Semantic UI Automatic (Use defaults locations and all components)

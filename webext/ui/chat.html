@@ -56,18 +56,29 @@
             </div>
             <div id="container" class="ui basic segment">
                 <div class="ui sixteen column centered internally celled grid"
-                style="height:100%;margin:inherit;">
-                    <div class="one column centered row">
-                        <div class="column" style="height:89%">
+                    style="height:100%;margin:inherit;">
+
+                    <div id="chat" class="one column centered row">
+                        <div id="error" class="column" style="display:none">
+                            <div class="ui error message">
+                                <i class="close icon"></i>
+                                <div class="header"></div>
+                                <p class="body"></p>
+                            </div>
+                        </div>
+                        <div class="column"
+                            style="height:89%;box-shadow:none;">
                             <div id="chatHistory" class="windows"></div>
                         </div>
-                        <div class="column" style="padding-top:0;">
+                        <div class="column"
+                            style="padding-top:0;box-shadow:none;">
                             <div id="chatReply" class="ui icon input windows">
                                 <input type="text" placeholder="Reply...">
                                 <i class="send icon"></i>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>

@@ -59,6 +59,19 @@ function talkToContact(ringId)
 
 // Chat
 
+function showError(header, body)
+{
+    $('#chat #error .header').html(header);
+    $('#chat #error .body').html(body);
+
+    $('#chat #error').show();
+    $(window).scrollTop(0);
+
+    $('#chat #error .close').click(function (e) {
+        $('#chat #error').hide();
+    });
+}
+
 function initChatHistory()
 {
     loadContactChatHistory();
@@ -168,9 +181,10 @@ $('#chatReply').keypress(function(e)
                     currentContactId, messageStatus, message);
 
                 addChatHistoryItem('text/plain', message, 'right', false);
+                scrolldownChatHistory();
+
                 $('#chatReply input').val('');
                 $('#chatReply input').focus();
-                scrolldownChatHistory();
             }
         );
     }
@@ -351,7 +365,8 @@ ringAPI.websocket.onopen = function(event)
 
 ringAPI.websocket.onclose = function(event)
 {
-    console.log('Ring API websocket closed');
+    showError('Websocket connection failed',
+        'Verify that the Ring API is running and you are using the same port');
 };
 
 ringAPI.websocket.onmessage = function(event)

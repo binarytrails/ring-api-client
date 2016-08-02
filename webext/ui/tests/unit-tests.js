@@ -31,22 +31,90 @@ var _ = require('lodash'),
 
 var uiLocalStorage = require('../js/localStorage-rewrite.js');
 
-// LocalStorage Tests
+
+// ----------------------LocalStorage Tests---------------------------
 
 console.log('Testing js/localStorage-rewrite.js');
+localStorage.clear();
 
-// USER
+var storage = new uiLocalStorage.RingLocalStorage();
+console.assert(storage != null, 'Failed to intiate RingLocalStorage');
 
-var ringLs = new uiLocalStorage.RingLocalStorage();
-console.assert(ringLs != null, 'Failed to intiate RingLocalStorage');
+// USER table
 
-var user = ringLs.createUser('a', 'b', {});
-console.assert(user != {}, 'Failed to create user');
+// create
+var user = storage.createUser('a', 'b');
+console.assert(user != {}, 'Failed to CREATE user');
+console.assert(user.FIRSTNAME == 'a', 'Failed to SET user FIRSTNAME on CREATE');
+console.assert(user.LASTNAME == 'b', 'Failed to SET user LASTNAME on CREATE');
+console.assert(_.isEmpty(user.ACCOUNTS), 'Failed to SET user ACCOUNTS on CREATE');
 
-console.assert(_.isEqual(user, ringLs.getUser()),
+// get
+console.assert(_.isEqual(user, storage.getUser()),
     "Get didn't returned the created user");
 
-var newUser = ringLs.updateUser('c');
-console.assert(_.isEqual(newUser.name, ringLs.getUser().name),
-    'Failed to update the user');
+// UPDATE
+var newUser = storage.updateUser('c');
+console.assert(_.isEqual(newUser.name, storage.getUser().name),
+    'Failed to UPDATE the user');
+
+// CONTACT table
+
+// CREATE
+var contactId = storage.createContact('a', 'b');
+
+// test add to user contacts
+console.assert(storage.contactExists(contactId), 'Failed to ADD contact to user');
+
+// test add to contacts
+var contact = storage.getContact(contactId);
+
+console.assert(contact.FIRSTNAME == 'a',
+    'Failed to SET contact FIRSTNAME on CREATE');
+console.assert(contact.LASTNAME == 'b',
+    'Failed to SET contact LASTNAME on CREATE');
+
+// UPDATE
+
+// update info
+storage.updateContact(contact.ID, firstname='x', lastname='y');
+
+console.assert(storage.getContact(contactId).FIRSTNAME == 'x',
+    'Failed to SET contact FIRSTNAME on UPDATE');
+console.assert(storage.getContact(contactId).LASTNAME == 'y',
+    'Failed to SET contact LASTNAME on UPDATE');
+
+// add account
+var settings = {'x': 1, 'y': 2};
+storage.addContactAccount(contact.ID, 'a', settings);
+
+console.assert(_.isEqual(
+    storage.getContact(contact.ID).ACCOUNTS['a'], settings),
+    'Failed to ADD contact account');
+
+// delete account
+
+console.assert(storage.contactAccountExists(contact.ID, 'a'),
+    'Cannot test delete account of a contact');
+storage.deleteContactAccount(contact.ID, 'a');
+
+console.assert(!storage.contactAccountExists(contact.ID, 'a'),
+    'Failed to DELETE contact account');
+
+// DELETE
+
+console.assert(storage.contactExists(contactId),
+    'Cannot test DELETE contact');
+
+storage.deleteContact(contactId);
+
+// test delete from user contacts
+console.assert(!storage.userContact(contactId),
+    'Failed to DELETE contact from user contacts');
+
+// test delete from contacts
+console.assert(!storage.contactExists(contactId),
+    'Failed to DELETE contact from contacts');
+
+console.log('\nAll unit-tests passed');
 

@@ -27,130 +27,251 @@
 var RingLocalStorage = function()
 {
     // Generates a singleton
-    this.userID = 'RingUser1';
+    this.userId = this.uuid();
 };
 
-// exposure to node.js
-module.exports.RingLocalStorage = RingLocalStorage;
+// Exposure to Node.js tests/unit-tests.js
+if (!(typeof module === 'undefined'))
+{
+    module.exports.RingLocalStorage = RingLocalStorage;
+}
 
-// User
-
-// TODO validate accounts templates
+// USER table
 
 RingLocalStorage.prototype.createUser = function(
-    name, lastname, accounts, contacts={})
+    firstname, lastname, accounts=null, contacts=null)
 {
-    if (localStorage.getItem(this.userID))
+    var users = JSON.parse(localStorage.getItem('users'));
+    users = !users ? {} : users;
+
+    if (users[this.userId])
     {
         throw new Error('User already created');
     }
-    else if (!accounts)
-    {
-        throw new Error('You need at least one account to create the user');
-    }
     
     var user = {
-        'ID':       this.userID,
-        'NAME':     name,
-        'LASTNAME': lastname,
-        'ACCOUNTS': accounts,
-        'CONTACTS': contacts
+        'ID':           this.userId,
+        'FIRSTNAME':    firstname,
+        'LASTNAME':     lastname,
+        'ACCOUNTS':     !accounts ? {} : accounts,
+        'CONTACTS':     !contacts ? [] : contacts
     };
+    users[this.userId] = user;
 
-    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('users', JSON.stringify(users));
     return user;
 };
 
 RingLocalStorage.prototype.getUser = function()
 {
-    return JSON.parse(localStorage.getItem('user'));
+    var users = JSON.parse(localStorage.getItem('users'));
+
+    if (!users[this.userId])
+    {
+        throw new Error("User haven't been created");
+    }
+
+    return users[this.userId];
 };
 
 RingLocalStorage.prototype.updateUser = function(
-    name=null, lastname=null, accounts=null, contacts=null)
+    firstname=null, lastname=null, accounts=null, contacts=null)
 {
-    var user = this.getUser();
+    var user = this.getUser(),
+        users = JSON.parse(localStorage.getItem('users'));
 
     user = {
-        'ID':       this.userID,
-        'NAME':     !name ? user.name : name,
-        'LASTNAME': !lastname ? user.lastname : lastname,
-        'ACCOUNTS': !accounts ? user.accounts : accounts,
-        'CONTACTS': !contacts ? user.contacts : contacts
+        'ID':       this.userId,
+        'FISTNAME': !firstname ? user.FIRSTNAME : firstname,
+        'LASTNAME': !lastname ? user.LASTNAME : lastname,
+        'ACCOUNTS': !accounts ? user.ACCOUNTS : accounts,
+        'CONTACTS': !contacts ? user.CONTACTS : contacts
     };
+    users[user.ID] = user;
 
-    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('users', JSON.stringify(users));
     return user;
 };
 
-// deleteUser: You delete the plugin.
-
-// Contacts
-
-RingLocalStorage.prototype.accountContacts = function(accountId)
+RingLocalStorage.prototype.getUserContacts = function()
 {
-    var data = JSON.parse(localStorage.getItem('ring.cx')),
-        account = data[accountId];
-
-    if (!account)
+    var users = JSON.parse(localStorage.getItem('users'));
+    
+    if (!users[this.userId])
     {
-        throw new Error("Account '" + account + "' doesn't exists");
+        throw new Error("User haven't been created");
+    }
+    
+    return users[this.userId].CONTACTS;
+}
+
+RingLocalStorage.prototype.userContact = function(contactId)
+{
+    var contacts = this.getUserContacts(),
+        hasContact = false;
+
+    for (key in contacts)
+    {
+        if (key == contactId)
+        {
+            hasContact = true;
+        }
     }
 
-    return account['contacts'];
+    return hasContact;
 }
 
-RingLocalStorage.prototype.accountContact = function(accountId, contactId)
+// deleteUser: You delete the plugin, see the wiki: storage section.
+
+RingLocalStorage.prototype.createContact = function(
+    firstname, lastname)
 {
-    var data = JSON.parse(localStorage.getItem('ring.cx'));
-    return data[accountId]['contacts'][contactId];
+    // Create it
+    var contactId = this.uuid(),
+        contact = {
+            'ID':           contactId,
+            'FIRSTNAME':    firstname,
+            'LASTNAME':     lastname,
+            'ACCOUNTS':     {}
+        },
+        contacts = JSON.parse(localStorage.getItem('contacts')),
+        users = JSON.parse(localStorage.getItem('users'));
+
+    contacts = !contacts ? {} : contacts;
+    
+    if (!users[this.userId])
+    {
+        throw new Error("User haven't been created");
+    }
+
+
+    // Add it to contacts
+    contacts[contactId] = contact;
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+
+    // Add to user contacts
+    users[this.userId].CONTACTS.push(contact.ID);
+    localStorage.setItem('users', JSON.stringify(users));
+
+    return contactId;
+};
+
+RingLocalStorage.prototype.contactExists = function(contactId)
+{
+    var contacts = JSON.parse(localStorage.getItem('contacts'));
+    return !!contacts[contactId];
 }
 
-RingLocalStorage.prototype.saveAccountContact = function(accountId, contact)
+RingLocalStorage.prototype.getContact = function(contactId)
 {
-    var data = JSON.parse(localStorage.getItem('ring.cx'));
-        accountContacts = data[accountId]['contacts'];
+    var contacts = JSON.parse(localStorage.getItem('contacts'));
 
-    accountContacts[contact.ringId] = {
-        'profile': {
-            'name': contact.name,
-            'lastname': contact.lastname
+    if (!contacts[contactId])
+    {
+        throw new Error('Contact with ID ' + contactId + " does't exists.");
+    }
+
+    return contacts[contactId];
+}
+
+RingLocalStorage.prototype.getContacts = function()
+{
+    return JSON.parse(localStorage.getItem('contacts'));
+}
+
+RingLocalStorage.prototype.updateContact = function(
+    contactId, firstname=null, lastname=null)
+{
+    var contacts = JSON.parse(localStorage.getItem('contacts')),
+        contact = this.getContact(contactId);
+
+    contact.FIRSTNAME = !firstname ? contact.FIRSTNAME : firstname;
+    contact.LASTNAME = !lastname ? contact.LASTNAME: lastname;
+    
+    contacts[contactId] = contact;
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+    
+    return contact;
+}
+
+RingLocalStorage.prototype.addContactAccount = function(
+    contactId, accountId, settings)
+{
+    var contacts = JSON.parse(localStorage.getItem('contacts')),
+        contact = this.getContact(contactId),
+        newAccount = true;
+
+    for (key in contact.ACCOUNTS)
+    {
+        if (key == accountId)
+        {
+            newAccount = false;
         }
-    };
-    data[accountId]['contacts'] = accountContacts;
+    }
 
-    localStorage.setItem('ring.cx', JSON.stringify(data));
+    if (!newAccount)
+    {
+        throw new Error('Account with ID ' + accountId + ' exists');
+    }
+
+    contact.ACCOUNTS[accountId] = settings;
+
+    contacts[contact.ID] = contact;
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+
+    return contact;
+}
+
+RingLocalStorage.prototype.contactAccountExists = function(
+    contactId, accountId)
+{
+    var contacts = JSON.parse(localStorage.getItem('contacts')),
+        contact = this.getContact(contactId),
+        accountExists = false;
+
+    for (key in contact.ACCOUNTS)
+    {
+        if (key == accountId)
+        {
+            accountExists = true;
+        }
+    }
+
+    return accountExists;
+}
+
+RingLocalStorage.prototype.deleteContactAccount = function(
+    contactId, accountId)
+{
+    var contacts = JSON.parse(localStorage.getItem('contacts')),
+        contact = this.getContact(contactId);
+    
+    if (!this.contactAccountExists(contactId, accountId))
+    {
+        throw new Error('Account with ID ' + accountId + " doesn't exists");
+    }
+
+    delete contact.ACCOUNTS[accountId];
+
+    contacts[contact.ID] = contact;
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+
     return true;
 }
 
-RingLocalStorage.prototype.updateAccountContact = function(accountId, contact)
+RingLocalStorage.prototype.deleteContact = function(contactId)
 {
-    var data = JSON.parse(localStorage.getItem('ring.cx'));
-        accountContacts = data[accountId]['contacts'];
+    var contacts = JSON.parse(localStorage.getItem('contacts')),
+        users = JSON.parse(localStorage.getItem('users'));
+    
+    var contact = this.getContact(contactId);
+    
+    delete contacts[contactId];
+    delete users[this.userId].CONTACTS[contactId];
 
-    delete accountContacts[contact.ringId];
-
-    accountContacts[contact.ringId] = {
-        'profile': {
-            'name': contact.name,
-            'lastname': contact.lastname
-        }
-    };
-    data[accountId]['contacts'] = accountContacts;
-
-    localStorage.setItem('ring.cx', JSON.stringify(data));
-    return true;
-}
-
-RingLocalStorage.prototype.deleteAccountContact = function(accountId, contactId)
-{
-    var data = JSON.parse(localStorage.getItem('ring.cx'));
-        accountContacts = data[accountId]['contacts'];
-
-    delete accountContacts[contactId];
-    data[accountId]['contacts'] = accountContacts;
-
-    localStorage.setItem('ring.cx', JSON.stringify(data));
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+    localStorage.setItem('users', JSON.stringify(users));
+    
     return true;
 }
 
@@ -180,6 +301,8 @@ RingLocalStorage.prototype.clearContactsNotifications = function()
 }
 
 // Chat History
+
+// TODO rewrite to new schema
 
 RingLocalStorage.prototype.accountContactHistory = function(accountId, contactId)
 {
@@ -248,5 +371,21 @@ RingLocalStorage.prototype.deleteContactHistory = function(accountId, contactId)
     delete data[accountId]['contacts'][contactId]['history'];
     localStorage.setItem('ring.cx', JSON.stringify(data));
     return true
+}
+
+// Extra
+
+// Adapted RFC 4122
+RingLocalStorage.prototype.uuid = function()
+{
+    var array = [];
+    var hexDigits = "0123456789abcdef";
+
+    for (var i = 0; i < 10; i++)
+    {
+        array[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+    }
+
+    return array.join("");
 }
 

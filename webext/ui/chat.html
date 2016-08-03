@@ -21,7 +21,6 @@
         <link rel="stylesheet" type="text/css" href="css/chat.css"/>
         <script src="js/htmlBuilder.js"></script>
         <script src="js/localStorage.js"></script>
-        <script src="js/semantic.js"></script>
         <script src="js/chat.js" async></script>
     </head>
     <body>
@@ -68,7 +67,20 @@
                         </div>
                         <div class="column"
                             style="height:89%;box-shadow:none;">
-                            <div id="chatHistory" class="windows"></div>
+                            <div id="chatHistory" class="windows">
+
+                                <div class="chatHistoryItem">
+                                    <div class="chatHistoryItemImage"
+                                        style="float: right;">
+                                        <i class="huge spy icon"></i>
+                                    </div>
+                                    <div class="chatHistoryItemText"
+                                        style="float: right;">
+                                        inserted
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
                         <div class="column"
                             style="padding-top:0;box-shadow:none;">

@@ -149,6 +149,12 @@ html, body
                 overflow-y: auto;
             }
 
+                .contact
+                {
+                    /max-height: 3.3em;
+                    /overflow: hidden;
+                }
+
                 #contacts .label
                 {
                     width: 98%;
@@ -171,6 +177,8 @@ html, body
 
                 #contacts .text
                 {
+                    /width: 5em;
+                    overflow: hidden;
                     font-style: normal;
                     font-weight: normal;
                 }

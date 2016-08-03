@@ -29,12 +29,11 @@ var _ = require('lodash'),
 
 // Files
 
-var uiLocalStorage = require('../js/localStorage-rewrite.js');
-
+var uiLocalStorage = require('../js/localStorage.js');
 
 // ----------------------LocalStorage Tests---------------------------
 
-console.log('Testing js/localStorage-rewrite.js');
+console.log('Testing js/localStorage.js');
 localStorage.clear();
 
 var storage = new uiLocalStorage.RingLocalStorage();

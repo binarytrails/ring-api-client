@@ -31,21 +31,6 @@ $('#showContacts').click(function()
         //.sidebar('setting', 'transition', 'overlay')
 });
 
-$('#addContact').click(function()
-{
-    setupContactModal(null, 'New Contact', 'Cancel');
-
-    $('#contactModal').modal(
-    {
-        onApprove: addContact
-
-    }).modal('show');
-});
-
-$('#contactModalErrorClose').click(function(){
-    $('#contactModalError').hide();
-});
-
 $('.ui.search')
     .search({
         source: formatContactsSearch(currentAccountId),
@@ -67,6 +52,29 @@ $('.ui.search')
     })
 ;
 $('.ui.search .results').css({'width': '100%'});
+
+// create / edit modal
+
+$('#contactAccounts .dropdown').dropdown(
+{
+    transition: 'fade down',
+    duration: 300,
+});
+
+$('#contactModalErrorClose').click(function(){
+    $('#contactModalError').hide();
+});
+
+$('#addContact').click(function()
+{
+    setupContactModal(null, 'New Contact', 'Cancel');
+
+    $('#contactModal').modal(
+    {
+        onApprove: addContact
+
+    }).modal('show');
+});
 
 // Global functions
 

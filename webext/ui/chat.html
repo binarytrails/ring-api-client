@@ -67,7 +67,7 @@
                         <div class="column"
                             style="height:89%;box-shadow:none;">
                             <div id="chatHistory" class="windows">
-
+                                <!-- Example:
                                 <div class="chatHistoryItem">
                                     <div class="chatHistoryItemImage"
                                         style="float: right;">
@@ -78,7 +78,7 @@
                                         inserted
                                     </div>
                                 </div>
-
+                                -->
                             </div>
                         </div>
                         <!-- Input -->
@@ -127,7 +127,7 @@
                 </div>
                 <div class="description" style="width:100%;">
                     <div class="ui equal width padded grid"
-                        style="height:100%; width:98%;">
+                        style="height:100%;width:98%;">
                         <div class="row">
                             <div class="column">
                                 <div class="ui labeled input">
@@ -152,13 +152,46 @@
                         </div>
                         <div class="row">
                             <div class="column">
-                                <div class="ui fluid action labeled input">
+                                <div id="contactAccounts"
+                                    class="ui fluid action labeled input">
                                     <div class="ui label"
                                         style="background:#d7f5f0">
-                                        Ring ID
+                                        Accounts
                                     </div>
-                                    <input id="contactModalRingId"
-                                        type="text" placeholder="Ring ID">
+                                    <div class="ui dropdown selection"
+                                        style="width:100%">
+                                        <input type="hidden" name="gender">
+                                        <div class="default text">
+                                            RING or SIP
+                                        </div>
+                                        <i class="dropdown icon"></i>
+                                        <div class="menu">
+                                            <!-- Example:
+                                            <div class="item" data-value="1">1</div>
+                                            <div class="item" data-value="2">2</div>
+                                            -->
+                                        </div>
+                                    </div>
+                                    <div class="ui icon bottom left pointing dropdown button">
+                                        <i class="wrench icon"></i>
+                                        <div class="menu">
+                                            <div id="createContactAccount"
+                                                class="item">
+                                                <i class="plus icon"></i>
+                                                New
+                                            </div>
+                                            <div id="editContactAccount"
+                                                class="item">
+                                                <i class="edit icon"></i>
+                                                Edit
+                                            </div>
+                                            <div id="deleteContactAccount"
+                                                class="item">
+                                                <i class="delete icon"></i>
+                                                Delete
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -175,8 +208,6 @@
             </div>
             <div class="actions">
                 <div id="contactModalDeny" class="ui black deny button">
-                    <p>
-                    </p>
                 </div>
                 <div id="contactModalAccept"
                     class="ui positive right labeled icon button"

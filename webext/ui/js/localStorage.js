@@ -27,12 +27,6 @@
  *          users implementation which can be achieved by simple refactoring.
  */
 
-// Exposure to Node.js tests/unit-tests.js
-if (!(typeof module === 'undefined'))
-{
-    module.exports.RingLocalStorage = new RingLocalStorage;
-}
-
 // Constructor
 
 var RingLocalStorage = function()
@@ -49,6 +43,13 @@ var RingLocalStorage = function()
         this.userId = this.getUser().ID;
     }
 };
+
+// Exposure to Node.js tests
+
+if (!(typeof module === 'undefined'))
+{
+    module.exports.RingLocalStorage = RingLocalStorage;
+}
 
 // USER table
 

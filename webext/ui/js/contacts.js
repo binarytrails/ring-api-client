@@ -33,12 +33,12 @@ $('#showContacts').click(function()
 
 $('#addContact').click(function()
 {
-    showContactModal(null, 'New Contact', 'Cancel', 'Submit');
+    setupContactModal(null, 'New Contact', 'Cancel');
 
     $('#contactModal').modal(
     {
         onApprove: addContact
-    
+
     }).modal('show');
 });
 
@@ -138,12 +138,12 @@ function selectContact()
     talkToContact(ringId);
 }
 
-function showContactModal(contact, header, deny, accept)
+function setupContactModal(contact, header, deny)
 {
-    $('#contactModalHeader').text('Update Contact');
+    $('#contactModalHeader').text(header);
     $('#contactModalDeny').text(deny);
     $('#contactModalError').hide();
-    
+
     if (contact)
     {
         $('#contactModalName').val(contact.FIRSTNAME);
@@ -160,26 +160,26 @@ function updateContact()
 {
     var contactId = $(this).parent()[0].id;
         contact = storage.getContact(contactId);
-    
-    talkToContact(contactId);
-    
-    showContactModal(contact, 'Update Contact', 'Delete', 'Submit');
 
     if (!contact)
     {
         throw new Error('Contact with Id ' + contactId + " wasn't found.");
     }
 
-    $('#contactModal').modal({
-        // update
-        onApprove: function() {
+    talkToContact(contactId);
+
+    setupContactModal(contact, 'Update Contact', 'Delete');
+
+    $('#contactModal').modal(
+    {
+        onApprove: function()
+        {
             var first = $('#contactModalName').val(),
                 last = $('#contactModalLastname').val();
 
             storage.updateContact(contactId, first, last);
             $('#' + contactId + ' .text').html(first + ' ' + last);
         },
-        // delete
         onDeny: function()
         {
             storage.deleteContact(contactId);

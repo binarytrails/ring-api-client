@@ -30,7 +30,7 @@
 // Exposure to Node.js tests/unit-tests.js
 if (!(typeof module === 'undefined'))
 {
-    module.exports.RingLocalStorage = RingLocalStorage;
+    module.exports.RingLocalStorage = new RingLocalStorage;
 }
 
 // Constructor
@@ -279,10 +279,23 @@ RingLocalStorage.prototype.deleteContact = function(contactId)
     var contacts = JSON.parse(localStorage.getItem('contacts')),
         users = JSON.parse(localStorage.getItem('users'));
 
-    var contact = this.getContact(contactId);
+    // it will throw error if the contact doesn't exists
+    this.getContact(contactId);
 
+    // delete from user contacts
+    var userContacts = users[this.userId].CONTACTS;
+
+    for (var i = 0; i < userContacts.length; i++)
+    {
+        if (userContacts[i] == contactId)
+        {
+            userContacts.splice(i, 1);
+        }
+    }
+    users[this.userId].CONTACTS = userContacts;
+
+    // delete from contacts
     delete contacts[contactId];
-    delete users[this.userId].CONTACTS[contactId];
 
     localStorage.setItem('contacts', JSON.stringify(contacts));
     localStorage.setItem('users', JSON.stringify(users));

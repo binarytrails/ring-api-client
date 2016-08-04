@@ -54,30 +54,10 @@ function initContacts()
 
     for (var i = 0; i < contacts.length; i++)
     {
-        var contact = storage.getContact(contacts[i]),
-            name = contact.FIRSTNAME + ' ' + contact.LASTNAME;
+        var contact = storage.getContact(contacts[i]);
 
-        /* TODO: format contact name length
-         * It's possible to achieve it via css but not with .text using <i>.
-         *
-        if (name.length > 10)
-        {
-            name = name.substring(0, 10) + '..';
-        }
-        */
-
-        // You can add an image path as last argument
-        // i.e. 'images/avatar/large/white-image.png');
-
-        htmlContact = htmlBuilder.contact(contact.ID, name);
-
-        htmlContact.addEventListener('click', selectContact, false);
-
-        contactsItemOptions = htmlContact.childNodes[2];
-        contactsItemOptions.addEventListener(
-            'click', updateContact, false);
-
-        htmlContacts.insertBefore(htmlContact, htmlAddContact);
+        addContactToHtml(contact.ID, contact.FIRSTNAME, contact.LASTNAME,
+            selectContact, updateContact);
     }
 
     if (contacts)
@@ -116,15 +96,9 @@ function talkToContact(contactId)
 
 function showError(header, body)
 {
-    $('#chat #error .header').html(header);
-    $('#chat #error .body').html(body);
-
-    $('#chat #error').show();
-    $(window).scrollTop(0);
-
-    $('#chat #error .close').click(function (e) {
-        $('#chat #error').hide();
-    });
+    $('#errorHeader').html(header);
+    $('#errorBody').html(body);
+    $('#error').modal('show');
 }
 
 function initChatHistory()
@@ -382,38 +356,45 @@ function showContactModalError(header, body)
     $('#contactModal').show();
 }
 
-function addContact()
+function addContactToHtml(contactId, firstname, lastname,
+    onBodyClick, onOptionsClick)
 {
-    var contact = {};
-    contact.name = $('#contactModalName').val();
-    contact.lastname = $('#contactModalLastname').val();
-    contact.ringId = $('#contactModalRingId').val();
+    var name = firstname + ' ' + lastname;
 
-    // Validate contact existence
-    var htmlContact = document.getElementById(contact.ringId);
-    if (htmlContact)
+    /* TODO: format contact name length
+     * It's possible to achieve it via css but not with .text using <i>.
+     *
+    if (name.length > 10)
     {
-        showContactModalError('Not a new contact',
-            'There is a contact with the same Ring ID. ' +
-            'Please, modify the existing one.');
-        return false;
+        name = name.substring(0, 10) + '..';
     }
-    // Save it
-    var contactId = storage.createContact(contact.name, contact.lastname);
+    */
 
-    // Add new contact to HTML UI
-    htmlContact = htmlBuilder.contact(
-        contactId, contact.name + ' ' + contact.lastname);
+    // You can add an image path as last argument
+    // i.e. 'images/avatar/large/white-image.png');
+    htmlContact = htmlBuilder.contact(contactId, name);
 
-    htmlContact.addEventListener('click', selectContact, false);
+    htmlContact.addEventListener('click', onBodyClick, false);
 
     var contactsItemOptions = htmlContact.childNodes[2];
-    contactsItemOptions.addEventListener(
-        'click', updateContact, false);
+    contactsItemOptions.addEventListener('click', onOptionsClick, false);
 
     htmlContacts.insertBefore(htmlContact, htmlAddContact);
+}
 
-    // Set as interlocutor
+function addContact()
+{
+    var firstname = $('#contactModalName').val(),
+        lastname = $('#contactModalLastname').val();
+
+    // create it
+    var contactId = storage.createContact(firstname, lastname);
+
+    // add to html
+    addContactToHtml(contactId, firstname, lastname,
+        selectContact, updateContact);
+
+    // set interlocutor
     talkToContact(contactId);
 
     return true;

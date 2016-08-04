@@ -38,7 +38,7 @@ if (!(typeof module === 'undefined'))
 var RingLocalStorage = function()
 {
     var users = JSON.parse(localStorage.getItem('users'));
-    
+
     if (!users)
     {
         // Generates a singleton Id
@@ -57,12 +57,12 @@ RingLocalStorage.prototype.createUser = function(
 {
     var users = JSON.parse(localStorage.getItem('users'));
     users = !users ? {} : users;
-    
+
     if (users[this.userId])
     {
         throw new Error('User already created');
     }
-    
+
     var user = {
         'ID':           this.userId,
         'FIRSTNAME':    firstname,
@@ -85,7 +85,7 @@ RingLocalStorage.prototype.getUser = function()
         var lastUserId = Object.keys(users)[0];
         return users[lastUserId];
     }
-    
+
     return null;
 };
 
@@ -111,12 +111,12 @@ RingLocalStorage.prototype.updateUser = function(
 RingLocalStorage.prototype.getUserContacts = function()
 {
     var users = JSON.parse(localStorage.getItem('users'));
-    
+
     if (!users[this.userId])
     {
         throw new Error("User haven't been created");
     }
-    
+
     return users[this.userId].CONTACTS;
 }
 
@@ -153,7 +153,7 @@ RingLocalStorage.prototype.createContact = function(
         users = JSON.parse(localStorage.getItem('users'));
 
     contacts = !contacts ? {} : contacts;
-    
+
     if (!users[this.userId])
     {
         throw new Error("User haven't been created");
@@ -202,10 +202,10 @@ RingLocalStorage.prototype.updateContact = function(
 
     contact.FIRSTNAME = !firstname ? contact.FIRSTNAME : firstname;
     contact.LASTNAME = !lastname ? contact.LASTNAME: lastname;
-    
+
     contacts[contactId] = contact;
     localStorage.setItem('contacts', JSON.stringify(contacts));
-    
+
     return contact;
 }
 
@@ -260,7 +260,7 @@ RingLocalStorage.prototype.deleteContactAccount = function(
 {
     var contacts = JSON.parse(localStorage.getItem('contacts')),
         contact = this.getContact(contactId);
-    
+
     if (!this.contactAccountExists(contactId, accountId))
     {
         throw new Error('Account with ID ' + accountId + " doesn't exists");
@@ -278,15 +278,15 @@ RingLocalStorage.prototype.deleteContact = function(contactId)
 {
     var contacts = JSON.parse(localStorage.getItem('contacts')),
         users = JSON.parse(localStorage.getItem('users'));
-    
+
     var contact = this.getContact(contactId);
-    
+
     delete contacts[contactId];
     delete users[this.userId].CONTACTS[contactId];
 
     localStorage.setItem('contacts', JSON.stringify(contacts));
     localStorage.setItem('users', JSON.stringify(users));
-    
+
     return true;
 }
 
@@ -294,25 +294,36 @@ RingLocalStorage.prototype.deleteContact = function(contactId)
 
 RingLocalStorage.prototype.incrementContactsNotifications = function()
 {
-    var total = parseInt(localStorage.getItem('contactsNotifications'));
-    localStorage.setItem('contactsNotifications', total += 1);
+    var total = JSON.parse(localStorage.getItem('contactsNotifications'));
+
+    total = !total ? 0 : parseInt(total);
+    var result = total += 1;
+
+    localStorage.setItem('contactsNotifications', JSON.stringify(result));
+    return result;
 }
 
-RingLocalStorage.prototype.contactsNotifications = function()
+RingLocalStorage.prototype.getContactsNotifications = function()
 {
-    return localStorage.getItem('contactsNotifications');
+    var total = JSON.parse(localStorage.getItem('contactsNotifications'));
+    return !parseInt(total) ? 0 : total;
 }
 
 RingLocalStorage.prototype.substractContactsNotifications = function(value)
 {
-    var total = localStorage.getItem('contactsNotifications');
-    localStorage.setItem('contactsNotifications', total - value);
-    return total - value;
+    var total = this.getContactsNotifications(),
+        result = parseInt(total) - value;
+
+    result = (result < 0) ? 0 : result;
+
+    localStorage.setItem('contactsNotifications', JSON.stringify(result));
+    return result;
 }
 
 RingLocalStorage.prototype.clearContactsNotifications = function()
 {
-    localStorage.setItem('contactsNotifications', 0);
+    localStorage.setItem('contactsNotifications', JSON.stringify(0));
+    return 0;
 }
 
 // Chat History

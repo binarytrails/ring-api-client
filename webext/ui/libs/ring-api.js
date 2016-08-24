@@ -24,7 +24,7 @@ var RingAPI = function(host, httpPort, wsPort)
     this.httpPort = httpPort;
     this.wsPort = wsPort;
 
-    this.httpURL = 'http://' + host + ':' + httpPort + '/';
+    this.httpURL = 'http://' + host + ':' + httpPort + '/api/v1/';
     this.wsURL = 'ws://' + host + ':' + wsPort + '/';
     this.websocket = new WebSocket(this.wsURL);
 };
